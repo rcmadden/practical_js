@@ -24,3 +24,8 @@ function sayName() {
 
 // sayName();
 // conosle.log(secret); //ReferenceError: secret is not defined
+
+// circles and arrows on paper
+//    circle around function
+//    arrows only go out from circle (arrows don't point into circles)
+//    this is variable scope
