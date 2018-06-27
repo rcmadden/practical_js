@@ -13,3 +13,14 @@ function deleteTodo(position) {
     todos.splice(position, 1);
 
 }
+var myName = 'Russia';
+function sayName() {
+	var secret = 'watchandcode';
+	console.log(myName);
+}
+
+// if you're outside of a function (sayName) you can look out and see data.
+// BUT if you are outside you CANNOT look inside.
+
+// sayName();
+// conosle.log(secret); //ReferenceError: secret is not defined
