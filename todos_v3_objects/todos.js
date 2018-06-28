@@ -1,3 +1,5 @@
+// Put everything so far on an object that represents a todoList
+//  change the stand alone functions to a method on the todoList object
 // It should store the todos array on an object
 var todoList = {
     todos: ['item1', 'item2'],
@@ -6,16 +8,16 @@ var todoList = {
         console.log(this.todos);
     },
     addTodos: function(newTodo) {
-      this.todos.push(newTodo);
+      todoList.todos.push(newTodo); // if the todoList variable name changes must change reference to it everywhere
       todoList.displayTodos();
     },
     changeTodos: function(position, newTodo) {
         this.todos[position] = newTodo;
-        todoList.displayTodos();
+        this.displayTodos();
     },
     deleteTodos: function(position) {
         this.todos.splice([position], 1);
-        todoList.displayTodos();
+        this.displayTodos();
     }
 };
 
@@ -32,4 +34,4 @@ var russia = {
 };
 
 // name and sayName are object properties
-//
+// sayName is an annonymous function and is called by referencing the property name
