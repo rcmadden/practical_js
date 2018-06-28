@@ -8,7 +8,7 @@ function displayTodos() {
 function addTodo(newTodo) {
     todos.push(newTodo);
 }
-// It should have a function to delete a todo
+// It should have a function to delete a todo_
 function deleteTodo(position) {
     todos.splice(position, 1);
 

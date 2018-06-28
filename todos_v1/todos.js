@@ -4,10 +4,10 @@ var todos = [];
 //It should have a way to display todos
 console.log('My Todos:', todos);
 
-//It should have a way to add new todos
+//It should have a way to add new todo_
 todos.push(todos);
 
-// It should have a way to delete a todo
+// It should have a way to delete a todo_
 todos.splice(0, 1);
 
 function makeSandwichWith(filling) {

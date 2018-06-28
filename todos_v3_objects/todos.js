@@ -23,7 +23,7 @@ var todoList = {
 var russia = {
     name: 'Russia', // name property is an empty string?
     sayName: function () {
-        // debugger;
+        debugger;
         console.log(this); // prints the entire object
         console.log(name); // empty string/line? why no variable not defined error?
         console.log(this.name); // prints 'Russia' this refers to the Russia.name property value?
