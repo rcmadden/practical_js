@@ -1,5 +1,7 @@
+// It should store the todos array on an object
 var todoList = {
     todos: ['item1', 'item2'],
+    // It should have a displayTodos method
     displayTodos: function() {
         console.log(this.todos);
     },
@@ -17,5 +19,17 @@ var todoList = {
     }
 };
 
+// TODO: understand objects and keyword this
+var russia = {
+    name: 'Russia', // name property is an empty string?
+    sayName: function () {
+        // debugger;
+        console.log(this); // prints the entire object
+        console.log(name); // empty string/line? why no variable not defined error?
+        console.log(this.name); // prints 'Russia' this refers to the Russia.name property value?
+        console.log(russia.name); // prints 'Russia' same as above
+    }
+};
 
-
+// name and sayName are object properties
+//
