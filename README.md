@@ -1,2 +1,2 @@
 # practical_js
-Practical Javascript Course
+Practical Javascript course notes
