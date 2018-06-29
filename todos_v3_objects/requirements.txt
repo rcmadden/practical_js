@@ -1,5 +1,17 @@
-It should store the todos array on an object
-It should have a displayTodos method
-It should have an addTodo method
-It should have a changeTodo method
-It should have a deleteTodo method
+Put everything so far on an object that represents a todoList
+    It should store the todos array on an object
+    It should have a displayTodos method
+    It should have an addTodo method
+    It should have a changeTodo method
+    It should have a deleteTodo method
+
+
+Interlude - Success is the process
+    Ability = Process * Time
+        Process - set of habits and behaviours that can learn and adapt
+        Time - use process to be more efficeint with your time to learn.  You will learn more with experience
+
+        Focus on the process
+            1) understand and focus on the fundamentals
+            2) get great at asking questions
+                https://medium.com/@gordon_zhu/how-to-be-great-at-asking-questions-e37be04d0603

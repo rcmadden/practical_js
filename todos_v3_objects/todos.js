@@ -32,4 +32,4 @@ var russia = {
 };
 
 // name and sayName are object properties
-//
+// sayName is a function on an object which is called a method
