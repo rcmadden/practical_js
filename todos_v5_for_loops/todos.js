@@ -9,6 +9,7 @@ var todoList = {
         if (todo.length === 0) {
             console.log('You have NO Todos');
         } else {
+            console.log('My Todos:');
             for (var i = 0; i < todo.length; i++) {
                 if (todo[i].completed === true) {
                     console.log('(x) ', todo[i].todoText);
