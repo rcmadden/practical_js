@@ -22,7 +22,13 @@ var todoList = {
         todoList.displayTodos();
     },
     toggleCompleted: function(position) {
-        todoList.todos[position].completed = !todoList.todos[position].completed;
+        // TODO: revisit why this doesn't work after Lesson 6 interlude Data types and comparisons
+        // var todoCompleted = this.todos[position].completed;
+        // todoCompleted = !todoCompleted; // always returns false but works in console?
+
+        // todoList.todos[position].completed = !todoList.todos[position].completed;
+        var todo = this.todos[position];
+        todo.completed = !todo.completed;  // boolean "bang" ! operator returns opposite value
         todoList.displayTodos();
     }
 };
