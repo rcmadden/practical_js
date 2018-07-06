@@ -22,9 +22,12 @@ var todoList = {
         todoList.displayTodos();
     },
     toggleCompleted: function(position) {
+        debugger;
         // TODO: revisit why this doesn't work after Lesson 6 interlude Data types and comparisons
-        // var todoCompleted = this.todos[position].completed;
+        // var todoCompleted = this.todos[position].completed; // this assigns the value false to the variable todoCompleted
+        // console.log(todoCompleted);
         // todoCompleted = !todoCompleted; // always returns false but works in console?
+        // console.log(todoCompleted);
 
         // todoList.todos[position].completed = !todoList.todos[position].completed;
         var todo = this.todos[position];
