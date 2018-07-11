@@ -31,8 +31,16 @@ var todoList = {
         todo[position].completed = !todo[position].completed;
         this.displayTodos();
     },
-
+    deleteTodo: function(position) {
+        this.todos.splice([position], 1);
+        this.displayTodos();
+    },
+    changeTodo: function(position, todoText) {
+        this.todos[position].todoText = todoText;
+        this.displayTodos();
+    },
     toggleAll: function() {
+        debugger;
         var todo = this.todos;
         var totalTodos = todo.length;
         var completedTodos = 0;
@@ -47,7 +55,7 @@ var todoList = {
                 for (var i = 0; i < totalTodos; i++) {
                     todo[i].completed = false;
                 }
-        // Case2 if all are false make all true
+        // Case2 otherwise make all true
         } else {
             for (var i = 0; i < totalTodos; i++) {
                 todo[i].completed = true;
