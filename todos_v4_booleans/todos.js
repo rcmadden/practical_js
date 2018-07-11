@@ -23,15 +23,13 @@ var todoList = {
     },
     toggleCompleted: function(position) {
         debugger;
-        // TODO: revisit why this doesn't work after Lesson 6 interlude Data types and comparisons
+        // DONE: revisit why this doesn't work after Lesson 6 interlude Data types and comparisons
         // var todoCompleted = this.todos[position].completed; // this assigns the value false to the variable todoCompleted
-        // console.log(todoCompleted);
-        // todoCompleted = !todoCompleted; // always returns false but works in console?
-        // console.log(todoCompleted);
+        // todoCompleted = !todoCompleted; // changes the variable not the object
 
-        // todoList.todos[position].completed = !todoList.todos[position].completed;
         var todo = this.todos[position];
         todo.completed = !todo.completed;  // boolean "bang" ! operator returns opposite value
+
         todoList.displayTodos();
     }
 };
