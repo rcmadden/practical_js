@@ -1,7 +1,7 @@
 ### Lesson 6 
 Interlude Data Types & Comparisons
 
-#####Comparisons with objects
+###Comparisons with objects
           
           Identical Street
               house -> 101 Identical Street
@@ -19,13 +19,13 @@ Primitive (Values) are equal
     2
     2
 
-#####Objects (references)
+###Objects (references)
 
 { } === { } // false (2 different objects)
           
 HouseA === HouseA // true (same object)
 
-#####Access Objects & Properties on an object examples
+###Access Objects & Properties on an object examples
 
 ```sh
 1.  var myHouse = { color: 'blue' };
