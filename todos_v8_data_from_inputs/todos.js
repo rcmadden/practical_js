@@ -67,21 +67,6 @@ var todoList = {
 };
 
 
-// There should be a "Display Todos" button and a "Toggle all" button in the app
-
-var displayTodosButton = document.getElementById('displayTodosButton');
-// console.log(displayTodosButton);
-// 2. run displayTodos method when someone clicks display todos button
-displayTodosButton.addEventListener('click', function() {
-   todoList.displayTodos();
-});
-
-// clicking "Toggle all" should run todoList.toggleAll
-var toggleAllButton = document.getElementById('toggleAllButton');
-toggleAllButton.addEventListener('click', function() {
-    todoList.toggleAll();
-});
-
 handlers = {
     displayTodos: function() {
         todoList.displayTodos();
