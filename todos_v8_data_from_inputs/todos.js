@@ -19,7 +19,7 @@ var todoList = {
 
 
     },
-    addTodos: function(todoText) {
+    addTodo: function(todoText) {
         this.todos.push({
             todoText: todoText,
             completed: false
@@ -73,5 +73,28 @@ handlers = {
     },
     toggleAll: function() {
         todoList.toggleAll();
+    },
+    addTodo: function() {
+        var addTodoTextInput = document.getElementById('addTodoTextInput');
+        todoList.addTodo(addTodoTextInput.value);
+        addTodoTextInput.value = '';
+    },
+    changeTodo: function() {
+        var changeTodoPositionInput = document.getElementById('changeTodoPositionInput');
+        var changeTodoTextInput = document.getElementById('changeTodoTextInput');
+        todoList.changeTodo(changeTodoPositionInput.valueAsNumber, changeTodoTextInput.value);
+        changeTodoPositionInput.value = '';
+        changeTodoTextInput.value = '';
+    },
+    deleteTodo: function() {
+        var deleteTodoPositionInput = document.getElementById('deleteTodoPositionInput');
+        todoList.deleteTodo(deleteTodoPositionInput.valueAsNumber);
+        deleteTodoPositionInput.value = '';
+    },
+    toggleCompleted: function() {
+        var toggleCompletedInput = document.getElementById('toggleCompletedInput');
+        todoList.toggleCompleted(toggleCompletedInput.valueAsNumber);
+        toggleCompletedInput.value = '';
     }
+
 };
