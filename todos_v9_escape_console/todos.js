@@ -25,7 +25,6 @@ var todoList = {
         this.displayTodos();
     },
     toggleCompleted: function(position) {
-        debugger;
         var todo = this.todos;
         todo[position].completed = !todo[position].completed;
         this.displayTodos();
@@ -96,12 +95,17 @@ handlers = {
 };
 
 var view = {
-    // There should be an li for every item
    displayTodos: function() {
+    // There should be an li for every item
        var todosUl = document.querySelector('ul');
        todosUl.innerHTML = '';
        for (var i = 0; i < todoList.todos.length; i++) {
            var todosLi = document.createElement('li');
+           if (todoList.todos[i].completed === false ) {
+               todosLi.textContent = '( ) ' + todoList.todos[i].todoText;
+             } else {
+               todosLi.textContent = '(x) ' + todoList.todos[i].todoText;
+           }
            todosUl.appendChild(todosLi);
        }
    }
