@@ -98,15 +98,22 @@ var view = {
    displayTodos: function() {
     // There should be an li for every item
        var todosUl = document.querySelector('ul');
+         // clearing todosUl here clears the content from first time called
+        // does not remain when function is called again.
        todosUl.innerHTML = '';
        for (var i = 0; i < todoList.todos.length; i++) {
-           var todosLi = document.createElement('li');
-           if (todoList.todos[i].completed === false ) {
-               todosLi.textContent = '( ) ' + todoList.todos[i].todoText;
+           var todoLi = document.createElement('li');
+           var todo = todoList.todos[i];
+           var todoTextWithCompletion = '';
+
+           if (todo.completed === false ) {
+               todoTextWithCompletion = '( ) ' + todo.todoText;
              } else {
-               todosLi.textContent = '(x) ' + todoList.todos[i].todoText;
+               todoTextWithCompletion = '(x) ' + todo.todoText;
            }
-           todosUl.appendChild(todosLi);
+
+           todoLi.textContent = todoTextWithCompletion;
+           todosUl.appendChild(todoLi);
        }
    }
 };
