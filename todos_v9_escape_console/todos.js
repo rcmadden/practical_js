@@ -78,7 +78,7 @@ var view = {
    displayTodos: function() {
     // There should be an li for every item
        var todosUl = document.querySelector('ul');
-         // clearing todosUl here clears the content from first time called
+         // clearing toddosUl here clears the content from first time called
         // does not remain when function is called again.
        todosUl.innerHTML = '';
        for (var i = 0; i < todoList.todos.length; i++) {
