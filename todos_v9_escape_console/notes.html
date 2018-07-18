@@ -47,6 +47,25 @@
     function logName(name) {
         console.log(name)
         }
+        // the difference between
+        var test = logName();
+        test
+        // undefined
+        test === logName();
+        // true
+        logName();
+        // undefined
+        logName
+        // ƒ logName(name) {
+        //         console.log(name)
+        //         }
+        logName === logName();
+        // VM295:2 undefined
+        // false
+        logName === logName('Russia');
+        // VM295:2 Russia
+        // false
+
 
     // var students = ['jonahtan', 'jenni', 'forest'];
 
@@ -64,7 +83,38 @@
 
     // forEach(students, logName)
 
+    // addEventListener
+    // https://developer.mozilla.org/en-US/docs/Web/Tutorials right click + inspect element
 
-</script>s
+    $0
+    // <h1>Tutorials</h1>
+    var tutorialsElement = $0;
+
+    tutorialsElement.addEventListener('click', function(event) {
+	    console.log(event);
+    });
+
+    tutorialsElement.addEventListener('click', function(event) {
+	    console.log(event);
+    });
+
+    // 'return' statement
+    // if you do not return a value from a function the value will return undefined
+
+    function multiplyTwoNumbers(a, b) {
+	    var result = a * b;
+    }
+
+    var theProductOf2And10 = multiplyTwoNumbers(2, 10);
+    theProductOf2And10
+    // undefined
+
+    function multiplyTwoNumbers(a, b) {
+	    var result = a * b;
+	    return result
+    }
+    theProductOf2And10
+    // 20
+</script>
 </body>
 </html>
