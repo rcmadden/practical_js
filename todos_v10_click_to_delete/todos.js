@@ -106,7 +106,7 @@ var view = {
        var deleteButton = document.createElement('button');
        deleteButton.textContent = 'Delete';
        deleteButton.className = 'deleteButton';
-       return deleteButton
+       return deleteButton;
     }
 };
 // Each li should contain .todoText
