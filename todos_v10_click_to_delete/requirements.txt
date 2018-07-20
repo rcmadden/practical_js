@@ -1,5 +1,5 @@
-There should be a way to create delete buttons
-There should be a delete button for each todos
-Each li should have an id that has the todos position
-Delted buttons should have access to the todos id
-Clicking delete should update todoList.todos and the DOM
+There should be a way to create delete buttons.
+There should be a delete button for each todos.
+Each li should have an id that has the todos position.
+Delted buttons should have access to the todos id.
+Clicking delete should update todoList.todos and the DOM.
