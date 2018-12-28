@@ -107,18 +107,18 @@ var view = {
     setUpEventListeners: function() {
         var todosUl = document.querySelector('ul');
 
-    todosUl.addEventListener('click', function (event) {
-    // console.log(event.target.parentNode.id);
-    // Get the element that was clicked on
-    var elementClicked = event.target;
+        todosUl.addEventListener('click', function (event) {
+          // console.log(event.target.parentNode.id);
+          // Get the element that was clicked on
+          var elementClicked = event.target;
 
-    // check if elelemntClicked is a delete button
-    if (elementClicked.className === 'deleteButton') {
-    // Run handlers.deleteTodo(position)
-    // get position from parseInt(elementClicked.parentNode.id);
-    handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
-        }
-    });
+          // check if elelemntClicked is a delete button
+          if (elementClicked.className === 'deleteButton') {
+          // Run handlers.deleteTodo(position)
+          // get position from parseInt(elementClicked.parentNode.id);
+          handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+          }
+         });
   }
 };
 

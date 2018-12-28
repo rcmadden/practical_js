@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Filter Function</h1>
+    <script>
+        var values = [0,1,0,1,0];
+        
+        function filterValue(values) {
+            return values === 1;
+        }
+
+    // The filter() method creates an array filled with
+        // all array elements that pass a test
+        // (provided as a function).
+
+        // function myFilter (filterValue) {
+        //     var filteredArray = [];
+        //     values.forEach(function (element) {
+        //     if (this.filterValue(element) === true) {
+        //         filteredArray.push(element);
+        //         }
+        //     });
+        //     return filteredArray;
+        //     }
+
+
+    // The filter() method creates an array filled with
+        // all array elements that pass a test
+        // (provided as a function).
+
+        function myFilter (values) {
+            var filteredValues = [];
+            for (var i = 0; i < this.values.length; i++) {
+                if (filterValue(this.values[i])===true) {
+                    filteredValues.push(this.values[i]);
+                }
+            }
+            return filteredValues;
+        }
+
+    </script>
+</body>
+</html>

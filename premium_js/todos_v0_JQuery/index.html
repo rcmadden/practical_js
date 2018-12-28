@@ -1,0 +1,55 @@
+<!doctype html>
+<!--source: http://learn.jquery.com/about-jquery/how-jquery-works/-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Demo</title>
+</head>
+<body>
+    <a href="http://jquery.com/">jQuery</a>
+    <br>
+    <a hreg="google.com">Google</a>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+    <h1>Hello World</h1>
+    <script>
+
+    // Your code goes here.
+    //Note:  window object properties:
+    // 1.  called jQuery
+    // 2. and $. $ is simply an alias for jQuery
+
+        $(document).ready(function () {
+            // click handler for links
+            $("a").click(function (event) {
+                alert("Thanks for visiting");
+                // alert("The link no longer goes to JQuery page");
+                event.preventDefault();
+                $(this).hide("slow");
+            });
+        });
+
+
+        // source: http://learn.jquery.com/using-jquery-core/dollar-object-vs-function/
+        // jquery object method(s) act on selections
+        //  Methods called on jQuery selections are in the $.fn namespace,
+        // and automatically receive and return the selection as this.
+        // .each() <-called like this
+
+        $( "h1" ).remove();
+
+        // JQuery methods do not act on selections
+        //  Methods in the $ namespace are generally utility-type methods, and
+        //  do not work with selections;
+        //  they are not automatically passed any arguments, and
+        //  their return value will vary.
+        // $.each() <- called like this
+
+         // a few cases where object methods and core methods have the same names, such as
+        //  $.each() and .each().
+        //  In these cases, be extremely careful when reading the documentation that you are exploring the correct method.
+
+
+
+    </script>
+</body>
+</html>
