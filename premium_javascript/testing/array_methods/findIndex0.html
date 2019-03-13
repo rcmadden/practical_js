@@ -1,0 +1,127 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="../tinytest.js"></script> -->
+<script>
+// Prototype implementation:
+// function myFindIndex(array, callback){
+// 	for(var i = 0; i < array.length; i++) {
+//     	if(callback(array[i],i,array)){	
+//         	return i;
+// 		};
+// 	}
+// }
+// Function signature
+    // findIndex(array, callback[, thisArg])
+
+// Callback parameters:
+        // element: array[i]
+        // index: optioinal?
+        // array: optional?
+        // thisArg: optional
+
+// Return value:
+    // Returns a single value.
+
+// Desscription:
+// The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. 
+// Otherwise, it returns -1, indicating no element passed the test.
+
+// Edge Cases (callback changes the elements in the array)
+    // Elements that are appended to the array after the call to find begins will not be visited by callback
+    // If an existing, unvisited element of the array is changed by callback, its value passed to the visiting callback will be the value at the time that find visits that element's index
+    // elements that are deleted are still visited.
+    // what if the array is empty?
+
+// findIndex Possible features of arrays?
+    // in sparse arrays the callback is called even for indexes of entries not present in the array.
+    // The range of elements processed by findIndex is set before the first invocation of callback. 
+    // Elements appended to the array after the call to findIndex begins will not be processed by callback. 
+    // If an existing, unvisited element of the array is changed by callback, its value passed to the callback will be the value at the time that findIndex visits that element's index; 
+    // elements that are deleted are still visited.
+
+// Requirements:
+    //  1. It should run the callback array.legnth times up to the callback returns true.
+    //  2. It should pass the ith element as the 1st argument to the callback.
+    //  3. It should pass the ith element as the 2nd argument to the callback.
+    //  4. It should pass array as the 3rd argument to the callback.
+    //  5. It should accept an optional this object to be used as this when executing the callback.
+    //  6. If no this argument is passed, the Window object is used as this when executing the callback.
+    //  7. It should throw a typeError if the first argument passed in is not an array.
+    //  8. It should return the value of the first index in the array that returns true for the callback.
+    //  9. If the callback never returns a truthy value findIndex returns -1.
+    // 10. If the array's length is 0 findIndex returns -1.
+    
+
+
+// ECMA Script Specification:
+
+
+function findIndex(array, callback){
+	for(var i = 0; i < array.length; i++) {
+    	if(callback(array[i],i,array)){	
+        	return i;
+		};
+	}
+}
+
+    tests({
+    '1.  It should run the callback array.legnth times until the callback returns true.': function(){
+        numberOfTimesCallbackRan = 0;
+        findIndex([5, 12, 8, 130, 44], function(element){
+            numberOfTimesCallbackRan++;
+            return element > 10;
+        })
+        eq(numberOfTimesCallbackRan, 2); 
+    },
+    '2.  It should pass the ith element as the 1st argument to the callback.':function(){
+        findIndex([5], function(element){
+            eq(element, 5);
+        })
+    },
+    '3.  It should pass the ith element as the 2nd argument to the callback.':function(){
+        findIndex([5], function(element, index){
+            eq(index, 0);
+        })
+    },
+    '4.  It should pass array as the 3rd argument to the callback.':function(){
+        var arrayPassedIn = [5, 12, 8, 130, 44];
+        findIndex(arrayPassedIn, function(element, index, array){
+            eq(arrayPassedIn, array);
+            return element > 10;
+        })
+    },
+    '5.  It should accept an optional this object to be used as this when executing the callback.': function(){
+        findIndex([5, 12, 8, 130, 44], function(){
+            eq(this.description, 'optional this value.');
+        },{description: 'optional this value.'})
+    },
+    // If no this argument is passed, undefined is used. 
+    // No it's not undefined, it's actually the window Object inside the callback
+    '6.  If no this argument is passed, the Window object is used as this when executing the callback.': function(){
+        findIndex([5, 12, 8, 130, 44], function(){
+            // console.log(this);
+            eq(this, '[object Window]');
+        })
+    },
+    '7.  It should throw a typeError if the first argument passed in is not an array.': function(){
+        var nonArrayPassedIn = 'russia';
+        var isTypeError = false;
+            try {
+                findIndex(nonArrayPassedIn, function(){});
+            }
+            catch(e){
+                isTypeError = (e instanceof TypeError);
+            }
+        eq(isTypeError, true);
+    },
+    // it should actually findIndex
+    '8.  It should return the value of the first element in the array that returns true for the callback.': function(){
+        var arrayPassedIn = [5, 12, 8, 130, 44];
+        var value = find(arrayPassedIn, function(element){
+            return element > 10;
+        })
+        eq(arrayPassedIn[1], value);
+    }
+
+
+});
+</script>
