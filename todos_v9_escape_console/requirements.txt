@@ -1,3 +1,0 @@
-There should be an li for every item
-Each li should contain .todoText
-Each li should show .complteted

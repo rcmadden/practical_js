@@ -1,3 +1,0 @@
-.toggleAll: If everything is true, make everything false
-
-.toggleAll: Otherwise make everything true
