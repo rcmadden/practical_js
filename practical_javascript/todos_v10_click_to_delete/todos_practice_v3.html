@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <button onclick="handlers.addTodo()">Add</button>
+        <input id="addTodoInputText" type="text">
+    </div>
+    <div>
+        <!--<button onclick="handlers.deleteTodo()">Delete</button>-->
+        <!--<input id="deleteTodoPositionInput" type="number">-->
+    </div>
+
+    <ul>
+
+
+    </ul>
+
+    <script>
+        var todoList = {
+            todos: [],
+            addTodo: function(todoText) {
+                this.todos.push(todoText);
+            },
+            deleteTodo: function(position) {
+                this.todos.splice(position, 1);
+            }
+        };
+
+        var handlers = {
+            addTodo: function() {
+                var addTodoInputText = document.getElementById('addTodoInputText');
+                todoList.addTodo(addTodoInputText.value);
+                addTodoInputText.value = '';
+                view.displayTodos();
+
+            },
+            deleteTodo: function(position) {
+                // var deleteTodoPositionInput = document.getElementById('deleteTodoPositionInput');
+                // todoList.deleteTodo(deleteTodoPositionInput.valueAsNumber);
+                // deleteTodoPositionInput.value = '';
+                todoList.deleteTodo(position);
+                view.displayTodos();
+            }
+        };
+
+        var view = {
+            displayTodos: function() {
+                // debugger;
+                console.log(todoList.todos);
+                var todosUl = document.querySelector('ul');
+                todosUl.textContent = '';
+
+                for (var i = 0; i < todoList.todos.length; i++) {
+                    var todoLi = document.createElement('li');
+                    todoLi.textContent = todoList.todos[i];
+                    todoLi.id = i;
+                    todoLi.appendChild(this.createDeleteButton());
+                    todosUl.appendChild(todoLi);
+                }
+            },
+             setUpEventListeners: function() {
+                var todosUl = document.querySelector('ul');
+                todosUl.addEventListener('click', function(event) {
+                    // get the event elements target (delete button) to drill up to the parentNode for the id value
+                    console.log(event.target.parentNode.id);
+                    // Get the element that was clikded on
+                    var elementClicked = event.target;
+                    // check if element clicked is a delete button
+                    if (elementClicked.className === 'deleteButton') {
+                    // Run handlers .deleteTodo and pass it the value as an int in console.log
+                    handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+                    }
+                 })
+            },
+            createDeleteButton: function() {
+                var deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'deleteButton';
+                return deleteButton;
+            }
+        };
+        view.setUpEventListeners();
+
+        // after working out this logic move to view.setUpEventListeners
+        // var todosUl = document.querySelector('ul');
+        //
+        // todosUl.addEventListener('click', function(event) {
+        //     // get the event elements target (delete button) to drill up to the parentNode for the id value
+        //     console.log(event.target.parentNode.id);
+        //     // Get the element that was clikded on
+        //     var elementClicked = event.target;
+        //     // check if element clicked is a delete button
+        //     if (elementClicked.className === 'deleteButton') {
+        //     // Run handlers .deleteTodo and pass it the value as an int in console.log
+        //         handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+        //     }
+        // });
+    </script>
+</body>
+</html>

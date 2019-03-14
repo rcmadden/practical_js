@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Monaco, Courier, monospace;
+        }
+        h2 {
+            text-align: center;
+            }
+    </style>
+</head>
+<body>
+
+<h2>Todos</h2>
+<div>
+    <input id="addTodoInput">
+    <button onclick="handlers.displayTodos()">Add</button>
+</div>
+
+<script>
+    var todoList = {
+        todos: [],
+        addTodo: function (todoText) {
+            this.todos.push(todoText);
+            view.displayTodos();
+        }
+    };
+
+   var handlers = {
+       addTodo: function() {
+           document.getElementById('addTodoInput');
+       }
+   };
+
+   var view = {
+        displayTodos: function() {
+            console.log(todoList.todos);
+        }
+    };
+
+</script>
+
+</body>
+</html>

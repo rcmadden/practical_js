@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>SearchItUp</h1>
+    <input id ="addSearchInputText" type="text">
+    <button onclick="handlers.addSearch()">Search It Up</button>
+
+    <ul>
+
+    </ul>
+<script>
+
+    var searchList = {
+        searches: [],
+        addSearch: function(searchText) {
+            this.searches.push(searchText);
+            view.displaySearches();
+        }
+    };
+
+    var handlers = {
+        addSearch: function() {
+            var addSearchInputText = document.getElementById('addSearchInputText');
+            searchList.addSearch(addSearchInputText.value);
+            addSearchInputText.value = '';
+        }
+    };
+
+    var view = {
+        displaySearches: function() {
+            console.log(searchList.searches);
+            var searchesUl = document.querySelector('ul');
+            searchesUl.innerHTML = '';
+
+            for (var i = 0; i < searchList.searches.length; i++) {
+                var searchesLi = document.createElement('li');
+                searchesLi.textContent = searchList.searches[i];
+                searchesUl.appendChild(searchesLi);
+
+            }
+        }
+    };
+
+</script>
+</body>
+</html>
