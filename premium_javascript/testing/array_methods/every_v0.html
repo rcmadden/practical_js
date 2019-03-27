@@ -1,0 +1,201 @@
+<script src="../simpletest.js"></script>
+<!-- <script src="../tinytest.js"></script> -->
+<script>
+// Prototype implementation:
+// function every(array, callback){
+// 	for(var i = 0; i < array.length; i++){
+// 		if(callback(array[i], i, array) == false){
+// 			return false;
+// 		}
+// 	} return true;
+// }
+// Function signature
+    // every(array, callback[, thisArg])
+
+// Callback parameters:
+        // element: array[i]
+        // index: optioinal?
+        // array: optional?
+        // thisArg: optional
+
+// Return value:
+    // boolean value.  
+        // true if the callback function returns a truthy value for every array element; 
+        // otherwise, false.
+
+    
+// Desscription:
+    // The every() method returns true if every element in the array passes the test implemented by the provided function.
+        // returns true for any condition put on an empty array.
+        // Otherwise, it returns false.
+    
+// Requirements:
+    //  1. It should run the callback array.legnth times up to the callback returns false.
+    //  2. It should pass the ith element as the 1st argument to the callback.
+    //  3. It should pass the ith element as the 2nd argument to the callback.
+    //  4. It should pass array as the 3rd argument to the callback.
+    //  5. It should accept an optional this object to be used as this when executing the callback.
+    //  6. If no this argument is passed, the Window object is used as this when executing the callback.
+    //  7. It should throw a typeError if the first argument passed in is not an array.
+    //  8. If the callback tests false, it returns false immediately.
+    // 10. If the array's length is 0 every returns true for all tests.
+    // 11. It should not mutate the array on which it is called.
+    
+// Edge Cases (callback changes the elements in the array)
+    // 12. It should skip unassigned indexes.
+    // 13. The range of elements processed by every is set before the first invocation of callback. 
+    // x14. Elements appended to the array after the call to every begins will not be processed by callback. 
+    // 15. If existing elements of the array are changed, their value as passed to callback will be the value at the time every visits them.
+    // 16. It should NOT visit elements that are deleted.
+    
+    // ECMA Script Specification:
+    
+function every(array, callback, optionalThis){
+    var everyCallback = callback;
+    var length = array.length;
+    if(optionalThis){
+        everyCallback = callback.bind(optionalThis);
+    }
+    if(!Array.isArray(array)){
+        throw new TypeError;
+    }
+	for(var i = 0; i < length; i++){
+        if(i in array) {
+            if(everyCallback(array[i], i, array) == false){
+                return false;
+            }
+       }
+	} return true;
+}
+    
+    tests({
+    '1.  It should run the callback array.legnth times until the callback returns false.': function(){
+        numberOfTimesCallbackRan = 0;
+        var result = every([1, 2, 3], function(element){
+            numberOfTimesCallbackRan++;
+            return element < 2;
+        })
+        eq(numberOfTimesCallbackRan, 2); 
+        eq(result, false);
+    },
+    '2.  It should pass the ith element as the 1st argument to the callback.':function(){
+        every([5], function(element){
+            eq(element, 5);
+        })
+    },
+    '3.  It should pass the ith element as the 2nd argument to the callback.':function(){
+        every([5], function(element, index){
+            eq(index, 0);
+        })
+    },
+    '4.  It should pass array as the 3rd argument to the callback.':function(){
+        var arrayPassedIn = [5, 12, 8, 130, 44];
+        every(arrayPassedIn, function(element, index, array){
+            eq(arrayPassedIn, array);
+            return element > 10;
+        })
+    },
+    '5.  It should accept an optional this object to be used as this when executing the callback.': function(){
+        every([5, 12, 8, 130, 44], function(){
+            eq(this.description, 'optional this value.');
+        },{description: 'optional this value.'})
+    },
+    // If no this argument is passed, undefined is used. 
+    // No it's not undefined, it's actually the window Object inside the callback
+    '6.  If no this argument is passed, the Window object is used as this when executing the callback.': function(){
+        every([5, 12, 8, 130, 44], function(){
+            // console.log(this);
+            eq(this, '[object Window]');
+            eq(true, this === window);
+        })
+    },
+    '7.  It should throw a typeError if the first argument passed in is not an array.': function(){
+        var nonArrayPassedIn = 'russia';
+        var isTypeError = false;
+            try {
+                every(nonArrayPassedIn, function(){});
+            }
+            catch(e){
+                isTypeError = (e instanceof TypeError);
+            }
+        eq(isTypeError, true);
+    },
+    // it should actually test whether all elements in the array pass the test 
+    '8. If the callback tests false, it returns false immediately.': function(){
+        var arrayPassedIn = [5, 12, 8, 130, 44];
+        var numberOfTimesCallbackRan = 0;
+        var value = every(arrayPassedIn, function(element){
+            numberOfTimesCallbackRan++;
+            return element < 100;
+        })
+        eq(false, value);
+        eq(numberOfTimesCallbackRan, 4);
+    },
+    '10. If the array\'\s length is 0, every returns true for all tests': function(){
+        var value = every([], function(element){
+            return element > 0;
+        });
+        eq(true, value);
+    },
+    '11. It should not mutate the array on which it is called.':function(){
+        var originalArray = [1, 2];
+        every(originalArray, function(element, index, array){
+            return element > 10;
+        })
+        eq(2, originalArray.length);
+        eq(1, originalArray[0]); 
+        eq(2, originalArray[1]);
+    },
+    '12. It should skip unassigned indexes.' : function(){
+        var array = [, 1, ,];
+        var numberOfTimesCallbackRan = 0;        
+        every(array, function(element, index, array) {
+            numberOfTimesCallbackRan ++;
+            // console.log(index, element, index in array);
+            eq(1 in array, true);
+        })
+        eq(numberOfTimesCallbackRan, 1);
+    },
+    '13. The range of elements processed by every is set before the first invocation of callback.' : function(){
+        var originalArray = [1,2,3];
+        var numberOfTimesCallbackRan = 0 ;
+        var result = every(originalArray, function(element, index, array){
+            numberOfTimesCallbackRan++;
+            array[3] = 4; // range of indecies (array.length)
+            // array[2] = 4; // this would be range of elements?
+            return element <= 3;
+        })
+        eq(3, numberOfTimesCallbackRan);
+        eq(true,result);
+        eq(1, originalArray[0]);
+        eq(2, originalArray[1]);
+        eq(3, originalArray[2]);
+    },
+    // '14.Elements appended to the array after the call to every begins will not be processed by callback.': function(){
+    //     var array = [1,2,3];
+    //     var result = every(array, function(element, index, array){
+    //         array[3] = 4;
+    //         return element > 3;;
+    //     })
+    //     eq(-1, result);
+    // },
+    // '+15. It should not invoke callback on indexes changed by callback.':function(){
+    //     var array = [1,2,3];
+    //     var result = every(array, function(element, index){
+    //         array[2] = 5;
+    //         return element > 4;
+    //     })
+    //     eq(2, result);
+    // },
+    // '16. It should visit elements that are deleted.': function(){
+    //     var array = [1,2];
+    //     every(array, function(element, index){
+    //         console.log(index, element);
+    //         array.pop()
+    //         return index > 0;
+    //     })
+    //     eq(undefined, array[1]);
+    // }
+});
+</script>
+

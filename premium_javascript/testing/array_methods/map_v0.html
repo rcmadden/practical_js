@@ -90,16 +90,18 @@ tests({
         eq(new_array[0], 4);
     },
     'It should skip unassigned indexes': function() {
-        var weirdArry = [, 1];
-        var mappedArray = map(weirdArry, function double(number) {
+        var weirdArray = [, 1];
+        var mappedArray = map(weirdArray, function double(number) {
             return number * 2;
         });
-        // property in object
+        // propertyName in object
         // (0 in mappedArray) === false
         // mappedArray[1] === 2
         console.log(mappedArray);
-        eq(0 in mappedArray, false);
+        // eq(0 in mappedArray, false);
+        eq(false, 0 in mappedArray);
         eq(mappedArray[1], 2);
+
     }
 });
 
