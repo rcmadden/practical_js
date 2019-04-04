@@ -1,0 +1,29 @@
+<script src="../simpletest.js"></script>
+
+
+<script>
+// Prototype
+
+// Description
+// tests whether at least one element in the array passes the test implemented by the provided function.
+
+// Return Value
+    // true if the callback function returns a truthy value for any array element; otherwise, false.
+
+
+// Requirements
+    // returns false for any condition put on an empty array.
+
+
+tests ({
+    '1. ': function() {
+        some([1,2,3], function(){
+            return element > 3;
+        })
+        
+    }
+
+})
+
+
+</script>
