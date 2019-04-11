@@ -106,7 +106,7 @@ function every(array, callback, optionalThis){
         every([5, 12, 8, 130, 44], function(){
             // console.log(this);
             eq(this, '[object Window]');
-            eq(true, this === window);
+            eq(this === window, true);
         })
     },
     '7.  It should throw a typeError if the first argument passed in is not an array.': function(){
@@ -135,16 +135,16 @@ function every(array, callback, optionalThis){
         var value = every([], function(element){
             return element > 0;
         });
-        eq(true, value);
+        eq(value, true);
     },
     '10. It should not mutate the array on which it is called.':function(){
         var originalArray = [1, 2];
         every(originalArray, function(element, index, array){
             return element > 10;
         })
-        eq(2, originalArray.length);
-        eq(1, originalArray[0]); 
-        eq(2, originalArray[1]);
+        eq(originalArray.length, 2);
+        eq(originalArray[0], 1); 
+        eq(originalArray[1], 2);
     },
     // tests should run from general to specific
     // from number of times callback ran to 
@@ -183,11 +183,11 @@ function every(array, callback, optionalThis){
             // array[2] = 4; // this would be range of elements? but this fails
             return element <= 3;
         })
-        eq(3, numberOfTimesCallbackRan);
-        eq(true,result);
-        eq(1, originalArray[0]);
-        eq(2, originalArray[1]);
-        eq(3, originalArray[2]);
+        eq(numberOfTimesCallbackRan, 3);
+        eq(result, true);
+        eq(originalArray[0], 1);
+        eq(originalArray[1], 2);
+        eq(originalArray[2], 3);
     },
     '13.Elements appended to the array after the call to every begins will not be processed by callback.': function(){
         var array = [1,2];
@@ -195,7 +195,7 @@ function every(array, callback, optionalThis){
             array[3] = 4; // this will not be evaluated by callback so return value will be true, all elements evaluated will be less than 2
             return element < 3; 
         })
-        eq(true, result);
+        eq(result, true);
     },
     '14. If existing elements of the array are changed, their value as passed to callback will be the value at the time every visits them.': function(){
         var array = [1,2];
@@ -203,7 +203,7 @@ function every(array, callback, optionalThis){
             array[1] = 5; // element @index 1 will be > than 3 when element is visited and false will be returned
             return element < 3;
         })
-        eq(false, result);
+        eq(result, false);
     },
     '15. It should not visit elements that are deleted.': function(){
         var array = [1,2];
@@ -214,7 +214,7 @@ function every(array, callback, optionalThis){
             return element < 2;
         })
         eq(result, true);
-        eq(undefined, array[1]);
+        eq(array[1], undefined);
         eq(numberOfTimesCallbackRan, 1);
     }
 });
