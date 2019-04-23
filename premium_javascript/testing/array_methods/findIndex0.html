@@ -171,10 +171,12 @@ function findIndex(array, callback, optionalThis){
             array[3] = 4;  // it should NOT process the element at this position
             return element > 3;;
        })
-        eq(-1,result);
-        eq(1, originalArray[0]);
-        eq(2, originalArray[1]);
-        eq(3, originalArray[2]);
+        eq(result, -1);
+        // THIS LOGIC IS FLAWED
+        eq(originalArray[0], 1);
+        eq(originalArray[1], 2);
+        eq(originalArray[2], 3);
+        eq(originalArray[3], undefined);
    },
    '14.Elements appended to the array after the call to findIndex begins will not be processed by callback.': function(){
         var array = [1,2,3];
