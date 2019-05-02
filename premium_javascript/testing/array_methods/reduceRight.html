@@ -27,7 +27,6 @@
     // not an array
     // reduce returns a single value (what is a single value?)
 
-
 // Requirements:
 //  1. It should run callback array.length -1 for each element in the array.
 //  2. It should pass accumulator (value previoulsy returned in the last invocation of the callback) as the first parameter to callback.
@@ -186,6 +185,8 @@ tests({
         eq(result, 9);
     }, 
     // this statement is not true (element === array[i]) each element in the array is NOT set immutably before the call to callback
+    // range from the first element to last element at position 0 and position 2
+    // the elements in the range of positions 0 - 2 are set 
     // 'X15. The range of elements processed by reduceRight is set before the first call to callback.':function(){
     //     var array = [1,2,3];
     //     var result = reduceRight(array, function(accumulator, currentValue, index, array){
@@ -199,6 +200,8 @@ tests({
    // range of elements is not what native function does.
    // it could mean  array.length is set before  callback runs, but that is not what the spec says?
    // and makes no sense if the array is pre-pended or appended by the callback it visits the ELEMENTS at the time callback visits them
+   // TODO: recognize at this point I need to adjust my definitions/understanding
+   // TODO: understand range: TODO: understand range the elements in the range of positions 0 - 2 are set 
     '15. The range of indecies processed by reduceRight is set before the first call to callback.':function(){
         var array = [1,2,3];
         var numberOfTimesCallbackRan = 0;
