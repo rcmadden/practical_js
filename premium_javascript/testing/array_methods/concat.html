@@ -25,59 +25,111 @@
 // If the argument passed in is an array it should create a new array consisting of the elements in the object on which it is called, followed in order by, for each argument, the elements of that argument.
 // If the argument passed in is not an array it should return the argument itself.
 // If all valueN parameters are omitted, concat returns a shallow copy of the existing array on which it is called.
+// If a string is passed in as an argument, the string value is added to the new array.
 // Spec:
 // It should return an array containing the array elements of the object followed by the array elements of each argument in order, if called with zero or more arguments.
 
+// review other solutions:
+// If first value passed in is null TypeError: Cannot read property 'concat' of null is thrown
+// if first value passed in is undefined TypeError: Cannot read property 'concat' of undefined is thrown.
+// ??If first value passed in is Nan TypeError: NaN.concat is not a function is thrown
+// It should append other data type values passed as the > 2nd value passed to the array: undefined, null, true and NaN.
+// It should copy object references into the new array.
 // Return Value:
     // new Array instance
     // shallow copy?
 
 function concat(values){
-	var numberOfValues = values.length;
+    var numberOfValues = values.length;
     var newArray = [];
-    // refactor using forEach?
-	for(var i = 0; i < numberOfValues; i++){
-        for(var j = 0; j < values[i].length; j++){
-            newArray.push(values[i][j]);
-  		}
-	}
-	return newArray;
-}
+    var checkStringLength = 0;
+    
+    if (values[0] === null || values[0] === undefined) {
+        throw new TypeError("Cannot read property 'concat' of " + values[0]);
+    }
+    if (typeof(values[0]) === "boolean") {
+        // || isNaN(values[0] === true) //nthis did not work for NaN
+        throw new TypeError(values[0] + ".concat is not a function");
+    }
+    // if the first value IS a number 
+    if ((isNaN(values[0]) === false) && (Array.isArray(values[0]) === false)){
+        throw new SyntaxError('Invalid or unexpected token');
+    }
+    // if the first value is a string and not an array use string concat
+    if ((typeof(values[0]) === 'string') && (Array.isArray(values[0]) === false)){
+            if((numberOfValues - 1) === 1){
+               return values[0].concat(values[1]);
+            } else {
+                return values[0].concat(values[1], values[numberOfValues - 1]);
+            }
+    }
+    values.forEach(function(element){
+	// forEach element of each array append the array values to a new array
+        // if element is not an array
+        if ((Array.isArray(element)) === false){
+            newArray.push(element);
+        } else {
+            element.forEach(function(value){
+                newArray.push(value);
+            })
+        }
+    })
+    return newArray;
+};    
+    // //refactor using forEach?
+//     for(var i = 0; i < numberOfValues; i++){
+//         for(var j = 0; j < values[i].length; j++){
+//             if(typeof(values[i]) === 'string'){
+//                 if(values[i].length >= 1){
+//                 	checkStringLength = (values[i].length - 1);
+//                     newArray.push(values[i]);
+//                 	j = j + checkStringLength;
+//                 }
+//             } else {
+//                 newArray.push(values[i][j]);
+//             }
+//         }
+//     }
+//     return newArray;
+// };
+    
+
 
 // TODO: SimpleTest Helper if no test is called:
 // 1. if function is empty fail();
 // if tests does not call?/run eq, assertEquals, etc 
 // then fail();
 tests({
-    'It shuold return an array':function(){
+    '1. It shuold return an array':function(){
         var valuesPassedIn = [[1,2,3],["a","b","c"]]
         var newArray = concat(valuesPassedIn);
         eq(Array.isArray(newArray), true);
     },
-    'It should return a new array.':function(){
+    '2. It should return a new array.':function(){
         var valuesPassedIn = [[1,2,3],["a","b","c"]]
         var newArray = concat(valuesPassedIn);
         eq(newArray === valuesPassedIn, false);
     },
-    'It should merge 2 or more arrays.': function(){
+    '3. It should merge 2 or more arrays.': function(){
         var valuesPassedIn = [[1,2],[3,4],["a","b"]];
         var newArray = concat(valuesPassedIn);
         eq(newArray.length === 6, true);
     },
-    'It should merge 2 arrays and a value.': function(){
+    '4. It should merge 2 arrays and a value.': function(){
         var valuesPassedIn = [[1,2],[3,4],"a"];
         var newArray = concat(valuesPassedIn);
-        eq(newArray.length === 5, true);
+        eq(newArray.length === 5, true);    
     },
-    'If the argument passed in is an array it should create a new array consisting of the elements in the object on which it is called, followed in order by, for each argument, the elements of that argument.': function(){
+    '5. If the argument passed in is an array it should create a new array consisting of the elements in the object on which it is called, followed in order by, for each argument, the elements of that argument.': function(){
         var valuesPassedIn = [[1,2],["a","b"]]
         var newArray = concat(valuesPassedIn);
+
         eq(newArray[0], 1);
         eq(newArray[1], 2);
         eq(newArray[2], "a");
         eq(newArray[3], "b");
     },
-    'If the argument passed in is not an array it should return the argument itself.': function(){
+    '6. If the argument passed in is not an array it should return the argument itself.': function(){
         var valuesPassedIn = [[1,2],"a"]
         var newArray = concat(valuesPassedIn);
         // console.log(newArray);
@@ -85,13 +137,71 @@ tests({
         eq(newArray[1], 2);
         eq(newArray[2], "a");
     },
-    'If all valueN parameters are omitted, concat returns a shallow copy of the existing array on which it is called.': function(){
+    '7. If the first argument passed in is a number and not an array it should throw a syntax error.':function(){
+        var valuesPassedIn = [1,"a"];
+        var isSyntaxError = false;
+        try{
+            var newArray = concat(valuesPassedIn);
+        } catch (e){
+            isSyntaxError = (e instanceof SyntaxError);
+        }
+        eq(isSyntaxError, true);
+    },
+    '8. If the the first argument passed in is a string and not an array it should return a string of concatonated values.':function(){
+        var newString = concat(['hi',0,['there']]);
+        eq(newString, 'hi0there');
+
+    },
+    '9. If a string is passed in as the first of only 2 arguments the string concat is used.':function(){
+        var newString = concat(['hi', [1,2]]);
+        eq(newString, 'hi1,2');
+    }, 
+    
+    '10. If all valueN parameters are omitted, concat returns a shallow copy of the existing array on which it is called.': function(){
         var valuesPassedIn = [[1,2],]
         var newArray = concat(valuesPassedIn);
         // console.log(newArray);
         eq(newArray[0], 1);
         eq(newArray[1], 2);
         eq(newArray.length, 2);
+    },
+    '11. If arrays are passed in arrays are returned.': function(){
+        var valuesPassedIn = [[[1]], [2, [3]]]
+        var newArray = concat(valuesPassedIn);
+        // console.log(newArray);
+        // console.log(newArray[0]);
+        // console.log(newArray[1]);
+        // console.log(newArray[2]);
+
+        // eq(newArray[0], [1]);
+        // console.log(Array.isArray(newArray[0]));
+        eq(Array.isArray(newArray[0]), true);
+        eq(newArray[1], 2);
+        eq(Array.isArray(newArray[2]), true);
+        eq(newArray.length, 3);
+    },
+    '12. If a string is passed in as an argument, and not the first argument, the string value is added to the new array.':function(){
+        var newArray = concat([[1,2], 'hi']);
+        // console.log(newArray);
+        eq(newArray[2], 'hi');
+        eq(newArray.length, 3);
+    }, 
+
+    '13. If the first value passed in is null TypeError is thrown.':function(){
+        var isTypeError = false;
+        try {
+            var newArray = concat([null, [1,2]]);
+        } catch (e){
+            isTypeError = (e instanceof TypeError);    
+        }
+        eq(isTypeError, true);
+    },
+    '14. It should append other data type values passed as the > 2nd value passed to the array: undefined, null, true and NaN.': function(){
+        var newArray = concat([[1], [null],[undefined,1]]);
+        eq(newArray[1], null);
+        eq(newArray[2], undefined);
+        eq(newArray[3], true);
+        // console.log(newArray);
     }
 
 })
