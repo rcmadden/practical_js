@@ -37,7 +37,7 @@
  * -Joe Walnes
  * MIT License. See https://github.com/joewalnes/jstinytest/
  */
-
+// TODO: if no test is called, the function should fail.
 var TinyTestHelper = {
     renderStats: function(tests, failures){
         var numberOfTests = Object.keys(tests).length;
@@ -58,7 +58,7 @@ var TinyTest = {
         var failures = 0;
         var successes = 0;
         for (var testName in tests) {
-            var testAction = tests[testName];  
+            var testAction = tests[testName];      
             try {
                 testAction.apply(this);
                 successes++;
@@ -86,24 +86,32 @@ var TinyTest = {
     },
 
     assert: function(value, msg) {
+        assertionRanForThisTest = true;
         if (!value) {
             throw new Error('assert(): ' + msg);
         }
     },
 
     assertEquals: function(expected, actual) {
+        // numberOfTestAssertionsRan++;
+        assertionRanForThisTest = true;
         if (expected != actual) {
             throw new Error('assertEquals() "' + expected + '" != "' + actual + '"');
         }
     },
 
     assertStrictEquals: function(expected, actual) {
+        // numberOfTestAssertionsRan++;
+        assertionRanForThisTest = true;
         if (expected !== actual) {
             throw new Error('assertStrictEquals() "' + expected + '" !== "' + actual + '"');
         }
     }
 };
-
+var numberOfTestAssertionsRan = 0;// TODO: try toggle flag true false to indicate a test ran for each test. So test will fail if it does not run(wo I dont have to explicitly fail() a test)
+var assertionRanForThisTest = false;
+// TODO: fail() for tests where it did not run else succeess
+// TODO: bind assertionRanForThisTest with value to this.???
 var fail               = TinyTest.fail.bind(TinyTest),
     assert             = TinyTest.assert.bind(TinyTest),
     assertEquals       = TinyTest.assertEquals.bind(TinyTest),
