@@ -1,4 +1,5 @@
-<script src="../tinytest.js"></script>
+<!-- <script src="../tinytest.js"></script> -->
+<script src="../simpletest.js"></script>
 
 <script>
 // TODO: Read the MDNs for - try catch, instance of, TypeError, Error, Object.keys
@@ -16,20 +17,28 @@
 function reduce(array, callback, initialValue){
     var startingIndex = 0;
     var resultSoFar = initialValue;
-    var length = array.length; // name? how will this effect arguments.length? 
+    // var arrayLength = array.length; // name? how will this effect arguments.length? 
+    // var arrayLength = Object.keys(array).length; // NOT array.keys length, need to get total array length and the arrayIndexes to pull out the right elements
+    var arrayLength = array.length;
     // this fixes array length (which matches the native reduce) so if the callback adds items to the array could create an infinite loop
-    var arrayIndexes = Object.keys(array);
-    // No initialValue.
+    var arrayIndexes = Object.keys(array); // use keys to NOT count holes for var arr = [,1, ,2, 3,] > Object.keys(arr) >> (3) ["1", "3", "4"]
+    // If NO initialValue.
+    // if(!initialValue){  // this does not work if initial value is 0 use arguments.length instead 0 is coerced to false
+    //     resultSoFar = initialValue;
+    //     startingIndex = 0;
+    // }
+    // Detect if NO initial value (in forEach, filter and map we checked if initialValue exists)
     if (arguments.length < 3) { // is arguments better than checking if initialValue?
-        // Arry is empty, throw TypeError. Reduce Finishing Up [1:15:00]
-        // if (arrayIndexes.length === 0) {
-        //     throw new TypeError('Reduce of empty array with no initial value');
-        // }
-        // [1:30:00]
-        if (Object.keys(array).length === 0) {
+    // Array is empty, throw TypeError. Reduce Finishing Up [1:15:00]
+    // if (arrayIndexes.length === 0) {
+    //     throw new TypeError('Reduce of empty array with no initial value');
+    // }
+    // [1:30:00]
+        // if (Object.keys(array).length === 0) { // use keys to NOT count holes
+        if (arrayLength === 0) {
             throw new TypeError('Reduce of empty array with no initial value');
         }
-        // Array has one element return it. NOT array.length === 1 counts those with holes
+        // Array has one element return it. NOT array.length === 1 it counts those with holes
         if (arrayIndexes.length === 1) {
             var onlyIndex = arrayIndexes[0];
             var onlyElement = array[onlyIndex];
@@ -37,26 +46,36 @@ function reduce(array, callback, initialValue){
         }
         // we want to skip holes at the beginning of the array. BEGINNING??
         // while true keep going, when not true, stop.
-        while (startingIndex in array === false && startingIndex < length) {
+        while (startingIndex in array === false && startingIndex < arrayLength) {
             startingIndex++;
         }
-        // if(initialValue){  // this does not work if initial value is 0 ?
-        resultSoFar = array[startingIndex];
-        startingIndex++;
+        // WHY TF Does this work???
+        resultSoFar = array[startingIndex]; // 1.TF= If no initialValue, currentValue should start with array[1].
+        startingIndex++; // 2.TF=if no initial value callback will start at index one
+        for(var i = startingIndex; i < arrayLength; i++){
+            if (i in array) {
+                // previousValue, currentValue, currentIndex, array
+                resultSoFar = callback(resultSoFar, array[i], i, array);
+            }
+        } 
+        return resultSoFar;
 
-        // Has initialValue
+    // If initialValue exisits (arguments.length >= 3)
+    } else if (arrayIndexes.length === 0) {  // Need to check if array is empty.
+        return initialValue;
     } else {
-        // Need to check if array is empty.
-        if(arrayIndexes.length === 0){
-            return initialValue;
-        }
-    }
-    for(var i = startingIndex; i < length; i++){
-        if (i in array) {
-            resultSoFar = callback(resultSoFar, array[i], i, array);
-        }   
-    }
-    return resultSoFar;
+        
+        for(var i = startingIndex; i <= arrayLength; i++){
+            if (i in array) {
+                // previousValue, currentValue, currentIndex, array
+                resultSoFar = callback(resultSoFar, array[i], i, array);
+            }
+
+        } 
+        return resultSoFar;
+    } 
+
+return resultSoFar;
 };
 // Function signature:
     // reduce(array, callback[, initialValue])
@@ -152,7 +171,7 @@ tests({
         eq(reduceResult, initialValue);
         eq(numberOfTimesCallbackHasrun, 0);
     },
-    'If no initialValue, and array has one element, it should retrun that element without calling callback.': function(){
+    'If no initialValue, and array has one element, it should return that element without calling callback.': function(){
         var numberOfTimesCallbackHasrun = 0;
         var reduceResult = reduce([1], function(){
             numberOfTimesCallbackHasrun++;
@@ -160,26 +179,43 @@ tests({
         eq(reduceResult, 1);
         eq(numberOfTimesCallbackHasrun, 0);
     },
-    'It should actually reduce.': function(){
+    'If initial value it should actually reduce.': function(){
         var sum = reduce([1, 2, 3], function(a, b){
             return a + b;
         }, 0);
 
         eq(sum, 6);
     },
-    'If initialValue, it shoould exclude holes.': function(){
-        var sum = reduce([,1, ,2, 3,], function(a, b){
+    'It should actually reduce & exclude holes.': function(){
+        var sum = reduce([,1, ,2, 3], function(a, b){
             return a + b;
         }, 0);
 
         eq(sum, 6);
     },
-    'If no initialValue, it shoould exclude holes too.': function(){
+    'If initialValue, it shoould exclude holes.': function(){
+        var numberOfTimesCallbackHasrun = 0;
+        // [,1, ,2, 3,].reduce(function(accumulator, currentValue, currentIndex, array) {return accumulator+currentValue;});
         var sum = reduce([,1, ,2, 3,], function(a, b){
+            // debugger;
+            numberOfTimesCallbackHasrun++;
+            return a + b;
+        }, 0);
+
+        eq(sum, 6);
+        eq(numberOfTimesCallbackHasrun, 3)
+    },
+    'If no initialValue, it shoould exclude holes too (and callback should run array.length -1 times).': function(){
+        var numberOfTimesCallbackHasrun = 0;
+        
+        var sum = reduce([,1, ,2, 3,], function(a, b){
+            numberOfTimesCallbackHasrun++;
             return a + b;
         });
 
         eq(sum, 6);
+        eq(numberOfTimesCallbackHasrun, 2)
+
     },
     // we want the code to keep running, not just throw the error and stop
     'If array is empty, and no initialValue, throw TypeError.': function(){
