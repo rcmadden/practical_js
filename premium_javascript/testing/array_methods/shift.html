@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>shift()</title>
+    <script src="../simpletest.js"></script>
+</head>
+<body>
+<script>
+
+// Prototype 
+// (with slice)
+// function shift(array){
+// 	var arrayLength = array.length;
+// 	result = array[0];
+// 	array = array.slice(1);
+// 	console.log(array);
+// 	return result;
+// }
+// (without slice)
+// function shift(array){
+// 	var arrayLength = array.length;
+// 	var newArray = array;
+// 	result = newArray[0];
+// 	array = [];
+// 	for(var i = 1; i < arrayLength; i++){
+// 		array.push(newArray[i]);
+//     }
+// 	console.log(array);
+// 	return result;
+// }
+
+// Description
+    // removes the last element from an array and returns that element. 
+    // This method changes the length of the array.
+// Return Value
+    // The removed element from the array; 
+    // undefined if the array is empty.
+
+// Requirements
+    // It should accept an array as the first parameter passed in.
+    // If you call shift() on an empty array, it returns undefined.
+    // It should remove the last element from the array.
+    // It should return the element removed from the array.
+
+
+// without using slice
+function shift(array){
+	var arrayLength = array.length;
+	var newArray = array;
+	result = newArray[0];
+	array = [];
+	for(var i = 1; i < arrayLength; i++){
+		array.push(newArray[i]);
+    }
+	return result;
+}
+
+tests({
+    'It should accept an array as the first parameter passed in.':function(){
+        var array = ['one', 2];
+        var result = array.shift();
+        eq(true, Array.isArray(array));
+    },
+    'It should return the first element removed from the array.':function(){
+        var array = [1, 'two'];
+        var result = array.shift();
+        eq(1, result);
+    },
+    'It should remove the firstelement from the array.':function(){
+        var array = [1, 'two'];
+        var result = array.shift();
+        eq(undefined, array[1]);    
+    },
+    'If called on an empty array, it should return undefined.':function(){
+        var array = [];
+        var result = array.shift();
+        eq(undefined, result);
+    },
+    'It should remove an empty elements from the aray':function(){
+        var array = [,,,]
+        var result = array.shift();
+        // console.log(result);
+        // console.log(array);
+        eq(undefined, result);
+    }
+    
+    
+})
+
+
+
+
+
+</script>
+</body>
+</html>

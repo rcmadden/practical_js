@@ -50,9 +50,6 @@ tests({
         var array = ['a','b'];
         var result = push(array);
         eq(2,result);
-        // eq(array[0], result[0]);
-        // eq(array[1], result[1]);
-        // eq(array[2], result[2]);
     },
     'It should return the new length of the array.':function(){
         var array = ['a','b'];
@@ -78,13 +75,11 @@ tests({
     'It should append an array to the end of the array as an array object':function(){
         var array = [1];
         var result = push(array, [1,2]);
-        console.log(array);
         eq(true, Array.isArray(array[1]));
     },
     'It should append an array to the end of the array as an array object':function(){
         var array = [1];
         var result = push(array, [1,2]);
-        console.log(array);
         eq(true, Array.isArray(array[1]));
     },
     'It should append null, undefined and NaN values to the array':function(){
@@ -95,7 +90,6 @@ tests({
     'It should append to the end of a sparse array.':function(){
         var array = [,2,3];
         var result = push(array, 4);
-        console.log(array);
         eq(4, array[3]);
     }
 
