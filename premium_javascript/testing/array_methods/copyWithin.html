@@ -52,12 +52,14 @@
     // mutatated array
 
 function copyWithin(array, optionalTarget, optionalStartIndex, optionalEndIndex){
-    var arrayLength = Math.floor(array.length/2)
+    var arrayLength = Math.floor(array.length/2);
+    // var arrayLength = array.length/2;
     var target = 0;
     var startCopyFrom = 0;
     var endIndex = array.length;
-    var next = 0; 
-    
+    var pasteNowValue = 0; 
+    var pasteNextValue = 0;
+
     if(arguments.length < 2) {
         return array; 
     } else if(arguments.length < 3) { // target
@@ -96,7 +98,7 @@ function copyWithin(array, optionalTarget, optionalStartIndex, optionalEndIndex)
         }
         target = optionalTarget - 1;
         startCopyFrom = optionalStartIndex -1;  
-        endIndex = optionalEndIndex;
+        endIndex = optionalEndIndex -1;
         if(optionalStartIndex === optionalEndIndex){
             return array;
         }
@@ -105,27 +107,46 @@ function copyWithin(array, optionalTarget, optionalStartIndex, optionalEndIndex)
         if(i < endIndex){
             startCopyFrom = startCopyFrom + 1;
             target = target + 1;
-            // if (target > startCopyFrom){
-                // i++;
-            // }
-            next = array[startCopyFrom + 1]; // startIndex index to start copying elements from, default 0
-            // in test 10 the 2nd time: next line should be: array[target] = array[next]
-            array[target] = array[startCopyFrom]; // in test 10 the 2nd time: array[target] = array[next]
+            
+            pasteNowValue = array[startCopyFrom + 1]; // startIndex index to start copying elements from, default 0
+            // pasteNextValue = array[target + 1];
+            if(endIndex > arrayLength && i > 0) {
+                // array[target] = pasteNowValue;
+                // pasteNextValue = array[target + 1];
+                pasteNowValue = pasteNextValue;
+            } else {
+            // in test last the 2nd time: pasteNowValue line should be: array[target] = array[pasteNowValue]
+            // Should be(1st time or i = 0):
+                array[target] = array[startCopyFrom]; // in test 10 the 2nd time: array[target] = array[pasteNowValue]
+            }
             if(array[target + 1] === undefined){
                 return array;
-            } else if(next === undefined){
+            } else if(pasteNowValue === undefined){
                 return array;
             // } else if (target + 1 < endIndex - 1){ 
                 // return array;
-            } else if ((endIndex - 1 >= target + 1) && (arguments.length < 4)){ // start
-                array[target + 1] = next;
+            // } else if ((endIndex - 1 >= target + 1) && (arguments.length < 4) && (i + 1 > arrayLength)){ // array length 7 & arrayLength 3? 3.5 
+                // array[target + 1] = pasteNowValue;
+                // return array;
+            } else if ((endIndex - 1 >= target + 1) && (arguments.length < 5) && (optionalEndIndex !== undefined)){ // end
                 return array;
-            } else if ((endIndex - 1 >= target + 1) && (arguments.length < 5)){ // end
+            } else if (endIndex === target + 1){ // case #6
                 return array;
+            // } else if (endIndex > arrayLength){ // case #last;
+                // pasteNextValue = array[target + 1];
+                // array[target + 1] = pasteNowValue;
+                // if (i + 1 > arrayLength) {
+                    // array[target + 1] = pasteNextValue;
+                // }
             } else {
-                array[target + 1] = next;
+                pasteNextValue = array[target + 1];
+                array[target + 1] = pasteNowValue;
+                // last time drop in pasteNextValue
+                if(i === arrayLength) {
+                    array[target + 2] = pasteNextValue;
+                }
                 // target = target + 1;
-                // array[startCopyFrom + 1] = next;
+                // array[startCopyFrom + 1] = pasteNowValue;
             } 
         }
     } return array;
@@ -182,7 +203,7 @@ tests({
         var start = 1;
         var end = 2;
         var result = copyWithin(array, target, start, end);
-        // console.log(result);
+        console.log(result);
         eq(result[0], 2);
         eq(result[1], 2);
         eq(result[2], 3);
@@ -279,23 +300,50 @@ tests({
         var start = 0;
         var end = -2;
         var result = copyWithin(array, target, start, end);
-        console.log(result);
+        // console.log(result);
         eq(result[0], 1);
         eq(result[1], 1);
         eq(result[2], 2);
         eq(result[3], 4);
     },
-    // 'If end is omitted, copyWithin will copy until the last index (default to arr.length).':function(){
-    //     fail()
-    // },
+    'If end is omitted, copyWithin will copy until the last index (default to arr.length).':function(){
+        var array = [1,2,3,4];
+        var target = 1;
+        var start = 0;
+        var result = copyWithin(array, target, start);
+        console.log(result);
+        eq(result[0], 1);
+        eq(result[1], 1);
+        eq(result[2], 2);
+        eq(result[3], 3);
+    }, 
+    'If end is omitted, longer arrays will work.':function(){
+        var array = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+        // var array = [1,2,3,4,5,6,7];
+        var target = 1; 
+        var start = 0;
+        var result = copyWithin(array, target, start);
+        console.log(result);
+        eq(result[0], 1);
+        eq(result[1], 1);
+        eq(result[2], 2);
+        eq(result[3], 3);
+        eq(result[4], 4);
+        eq(result[5], 5);
+        eq(result[6], 6);
+        eq(result[7], 7);
+        eq(result[8], 8);
+        eq(result[9], 9);
+        eq(result[10], 10);
+        eq(result[11], 11);
+        eq(result[12], 12);
+    },
     // 'pasted sequence will have the copied values even when the copy and paste region overlap.':function(){
-    //     fail()
+        // fail()
     // },
     // 'It does not alter the length of this, but it will change its content and create new properties, if necessary.':function(){
     //     fail()
     // },
-    
-
 })
 
 </script>
