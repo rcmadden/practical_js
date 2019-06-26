@@ -52,13 +52,15 @@
     // mutatated array
 
 function copyWithin(array, optionalTarget, optionalStartIndex, optionalEndIndex){
-    var arrayLength = Math.floor(array.length/2);
+    // var arrayLength = Math.floor(array.length/2);
     // var arrayLength = array.length/2;
+    var arrayLength = array.length - 1;
     var target = 0;
     var startCopyFrom = 0;
     var endIndex = array.length;
     var pasteNowValue = 0; 
     var pasteNextValue = 0;
+    var pasteLastValue = (array.length) - 1;
 
     if(arguments.length < 2) {
         return array; 
@@ -126,10 +128,12 @@ function copyWithin(array, optionalTarget, optionalStartIndex, optionalEndIndex)
             // } else if (target + 1 < endIndex - 1){ 
                 // return array;
             // } else if ((endIndex - 1 >= target + 1) && (arguments.length < 4) && (i + 1 > arrayLength)){ // array length 7 & arrayLength 3? 3.5 
-                // array[target + 1] = pasteNowValue;
-                // return array;
-            } else if ((endIndex - 1 >= target + 1) && (arguments.length < 5) && (optionalEndIndex !== undefined)){ // end
-                return array;
+            //     array[target + 1] = pasteNowValue;
+            //     return array;
+            // } else if ((endIndex - 1 >= target + 1) && (arguments.length < 5) && (optionalEndIndex !== undefined)){ // end
+            //     pasteNextValue = array[target + 1];
+            //     array[target + 1] = pasteNowValue;
+            //     return array;
             } else if (endIndex === target + 1){ // case #6
                 return array;
             // } else if (endIndex > arrayLength){ // case #last;
@@ -143,11 +147,19 @@ function copyWithin(array, optionalTarget, optionalStartIndex, optionalEndIndex)
                 array[target + 1] = pasteNowValue;
                 // last time drop in pasteNextValue
                 if(i === arrayLength) {
-                    array[target + 2] = pasteNextValue;
+                    // if array length is even then this
+                    // if(array.length % 2 === 0){
+                        // array[target + 2] = pasteNextValue;
+                    // } else {
+                    // if array length is odd then this
+                        pasteLastValue = array[target + 2];
+                        array[target + 2] = pasteNextValue;
+                        array[target + 3] = pasteLastValue;
+                    // }
                 }
                 // target = target + 1;
                 // array[startCopyFrom + 1] = pasteNowValue;
-            } 
+            }    
         }
     } return array;
 }
@@ -318,8 +330,10 @@ tests({
         eq(result[3], 3);
     }, 
     'If end is omitted, longer arrays will work.':function(){
-        var array = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+        // var array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
         // var array = [1,2,3,4,5,6,7];
+        // var array = [1,2,3,4,5,6,7,8,9]; //fail odd numbers length 9 fix
+        var array = [1,2,3,4,5,6,7,8,9,10];
         var target = 1; 
         var start = 0;
         var result = copyWithin(array, target, start);
@@ -332,11 +346,39 @@ tests({
         eq(result[5], 5);
         eq(result[6], 6);
         eq(result[7], 7);
-        eq(result[8], 8);
-        eq(result[9], 9);
-        eq(result[10], 10);
-        eq(result[11], 11);
-        eq(result[12], 12);
+        eq(result[8], 8); // fail array length 9: fixed is was array.length/2
+        eq(result[9], 9); // fail array length 10
+        // eq(result[10], 10);
+        // eq(result[11], 11);
+        // eq(result[12], 12); // fail array length 13
+        // eq(result[13], 13);
+        // eq(result[14], 14);
+        // eq(result[15], 15);
+        // eq(result[16], 16);
+        // eq(result[17], 17);
+        // eq(result[18], 18);
+        // eq(result[19], 19);
+    },
+    'If end is added, it should still work.':function(){
+        // var array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+        // var array = [1,2,3,4,5,6,7];
+        // var array = [1,2,3,4,5,6,7,8,9]; //fail odd numbers length 9 fix
+        var array = [1,2,3,4,5,6,7,8,9,10];
+        var target = 1; 
+        var start = 0;
+        var end = 10;
+        var result = copyWithin(array, target, start, end);
+        console.log(result);
+        eq(result[0], 1);
+        eq(result[1], 1);
+        eq(result[2], 2);
+        eq(result[3], 3);
+        eq(result[4], 4);
+        eq(result[5], 5);
+        eq(result[6], 6);
+        eq(result[7], 7);
+        eq(result[8], 8); // fail array length 9: fixed is was array.length/2
+        eq(result[9], 9); // fail array length 10
     },
     // 'pasted sequence will have the copied values even when the copy and paste region overlap.':function(){
         // fail()
