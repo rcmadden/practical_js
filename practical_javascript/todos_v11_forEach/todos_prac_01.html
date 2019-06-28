@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Todos</h1>
+<div>
+    <button onclick="handlers.addTodo()">Add</button>
+    <input id="todoTextInput" type="text">
+</div>
+<div>
+    <button onclick="handlers.changeTodo()">Update</button>
+    <input id="changeTodoPositionInput" type="number">
+    <input id="changeTodoTextInput" type="text">
+</div>
+<div>
+    <button onclick="handlers.toggleCompleted()">Toggle</button>
+    <input id="toggleCompletedPositionInput" type="number">
+</div>
+<div>
+    <button onclick="handlers.toggleAll()" >Toggle All</button>
+</div>
+
+<ul>
+
+</ul>
+
+<script>
+
+var todoList = {
+    todos: [],
+    addTodo: function(todoText) {
+        this.todos.push({
+            todoText: todoText,
+            completed: false
+        });
+        view.displayTodos();
+    },
+    changeTodo: function(position, todoText) {
+        this.todos[position].todoText = todoText;
+        view.displayTodos();
+    },
+    toggleCompleted: function(position){
+        this.todos[position].completed = !this.todos[position].completed;
+        view.displayTodos();
+    },
+    toggleAll: function() {
+        var completedTodos = 0;
+        var totalTodos = this.todos.length;
+
+        // get completed todos count
+        // for (var i = 0; i < totalTodos; i++) {
+        this.todos.forEach(function(todo) {
+            if (todo.completed === false) {
+                completedTodos++;
+            }
+        });
+        // Case 1 if all todos are false make all true
+            this.todos.forEach(function(todo) {
+                if (completedTodos === totalTodos) {
+                    todo.completed = true;
+                } else {
+                // Case 2 else make them all false
+                    todo.completed = false;
+                }
+            });
+        view.displayTodos();
+    },
+    deleteTodo: function(position) {
+        this.todos.splice([position], 1);
+        view.displayTodos();
+    }
+
+};
+
+var appEventListeners = {
+    deleteTodo: function() {
+        var todosUl = document.querySelector('ul');
+        todosUl.addEventListener('click', function(event) {
+            todoList.deleteTodo(parseInt(event.target.parentNode.id));
+        })
+    }
+};
+
+var handlers = {
+    addTodo: function() {
+         var todoTextInput = document.getElementById('todoTextInput');
+         todoList.addTodo(todoTextInput.value);
+         todoTextInput.value = '';
+    },
+    changeTodo: function() {
+        var changeTodoPositionInput = document.getElementById('changeTodoPositionInput');
+        var changeTodoTextInput = document.getElementById('changeTodoTextInput');
+        todoList.changeTodo(changeTodoPositionInput.valueAsNumber, changeTodoTextInput.value);
+        changeTodoPositionInput.value = '';
+        changeTodoTextInput.value = '';
+    },
+    toggleCompleted: function() {
+        var toggleCompletedPositionInput = document.getElementById('toggleCompletedPositionInput');
+        todoList.toggleCompleted(toggleCompletedPositionInput.valueAsNumber);
+        toggleCompletedPositionInput.value = '';
+    },
+    toggleAll: function() {
+        todoList.toggleAll();
+    }
+};
+
+var view = {
+    displayTodos: function () {
+        var todosUl = document.querySelector('ul');
+        todosUl.textContent = '';
+        var todo = todoList.todos;
+
+        // for each todos item print an li
+        for (var i = 0; i < todo.length; i++) {
+            var todoLi = document.createElement('li');
+
+            if (todo[i].completed === false) {
+                todoLi.textContent = '( ) ' + todo[i].todoText;
+            } else {
+                todoLi.textContent = '(x) ' + todo[i].todoText;
+            }
+            todoLi.id = i;
+            todosUl.appendChild(todoLi);
+            todoLi.append(this.createDeleteButton());
+        }
+    },
+    createDeleteButton: function() {
+        var deleteButton = document.createElement('button');
+        deleteButton.className = 'deleteButton';
+        deleteButton.innerHTML = 'Delete';
+        return deleteButton;
+    }
+};
+
+appEventListeners.deleteTodo();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+It should have a place to store todos
+
+It should have a way to display todos
+
+It should have a way to add new todo_
+
+It should have a way to delete a todo_
+
+Features
+    Add a todo_
+    Toggle single item
+    Toggle all items
+    Edit a todo_
+    Delete a todo_
+
+Advanced Course
+    count of # of items left
+    all active and completed filter butons
+    clear completed when 1 has been deleted
+    local storage

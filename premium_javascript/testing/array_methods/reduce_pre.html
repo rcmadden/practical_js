@@ -1,0 +1,186 @@
+<script src="../tinytest.js"></script>
+<script>
+
+// testing the reduce implementation 
+// The reduce() method executes a reducer function (that you provide) 
+// on each member of the array resulting in a single output value.
+function reduce(array, callback, optionalInitialValue) {
+    var customTypeError = Error('TypeError: Empty array');
+    if(Array.isArray(array) && array.length > 0){
+        // currentIndex[i] Starts at index 0, if an initialValue is provided, and at index 1 otherwise. 
+        var accumulator = 0;
+        if(optionalInitialValue){
+            accumulator = optionalInitialValue;
+            for(var i = 0; i < array.length; i++) {
+                // accumulator, currentValue, currentIndex, array
+                callback(accumulator, array[i], i, array);
+                accumulator = accumulator + array[i];
+            }
+        }
+        // If the array has only one element and no initialValue is provided, the solo value will be returned without calling callback
+        if(array.length === 1) {
+            return array[0];
+        }
+        // If NO initialValue is provided, then accumulator will be equal to the first value in the array, 
+        // and currentValue will be equal to the second.
+        accumulator = array[0];
+        for(var i = 1; i < array.length; i++) {
+            // accumulator, currentValue, currentIndex, array
+            callback(accumulator, array[i], i, array);
+        }  
+        return accumulator;
+    } else if (optionalInitialValue) {
+        return optionalInitialValue;
+    } else {
+        callback(customTypeError);
+		return customTypeError;
+    }
+}
+// Example 1:
+// reduce() executes the callback function once for each element present in the array
+// function reduce(array, callback) {
+// 	for(var i = 0; i < array.length; i++) {
+//         callback();
+//     }   
+// }
+
+// Example 2:
+// the first argument to the callback
+// The accumulator accumulates the callback's return values; 
+// it is the accumulated value previously returned 
+// in the last invocation of the callback
+// var accumulator = 0;
+// function redyce(array, callback){
+// 	for(var i = 0; i < array.length; i++){
+// 		debugger;
+// 		accumulator = accumulator + array[i];
+// 		console.log(accumulator);
+//     }
+// 	return accumulator;
+// }
+// Example 4:
+// The current element being processed in the array.
+
+// Example 5:
+// The index of the current element being processed in the array. 
+// Starts at index 0, if an initialValue is provided, and at index 1 otherwise.
+
+// Example 6:
+// The array reduce() was called upon.
+
+// Example: 7
+// Value to use as the first argument to the first call of the callback. 
+// If no initial value is supplied, the first element in the array will be used. 
+
+//Example: 8
+// Starts at index 0, if an initialValue is provided, and at index 1 otherwise.
+
+// function reduce(accumulator, currentValue) {
+	// return accumulator + currentValue;
+// }
+// , excluding holes in the array
+// , receiving four arguments:
+
+tests({
+    // Function to execute on each element in the array NOT call the function array.length times?
+    // reduce() executes the callback function once for each element present in the array,
+    //  NOT in this case: Note: If initialValue isn't provided, reduce() will execute the callback 
+    //      starting at index 1, skipping the first index. If initialValue is provided, 
+    //      it will start at index 0.
+    // 'It should execute the callback array.length times.': function() {
+    //     var numberOfTimesCallbackRun = 0;
+    //     reduce([1,2,3], function(){
+    //         numberOfTimesCallbackRun++;
+    //     })
+    //     eq(3, numberOfTimesCallbackRun);
+    // },
+    'The first argument to the callback should accumulate the callbacks return values.': function(){
+        reduce([1], function(accumulator){
+            eq(1, accumulator);
+        })  
+    }, 
+    'The second argument to the callback should be the current element being processed in the array.': function(){
+        reduce([1], function(accumulator, currentValue){
+            eq(1, currentValue);
+        })
+    },
+    'The third argument to the callbak should be the currnt index of the element being processed in the array.': function(){
+        reduce([1], function(accumulator, currentValue, currentIndex){
+            eq(0, currentIndex);
+        })
+    },
+    'The fourth argument to the callbak should be the array reduce was called upon.': function(){
+        var arrayCalledOn = [1,2,3];
+        reduce(arrayCalledOn, function(accumulator, currentValue, currentIndex, array){
+            // console.log('initialVal: x', 'acc: ', accumulator, 'cv: ', currentValue, 'cI:', currentIndex, 'arr:', array)
+            eq(arrayCalledOn, array);
+        })
+    },
+    'It should accept an optional Value to use as the first argument to the first call of the callback.': function(){
+        // reduce(array, callback, initialValue)
+        // reduce([1,2,3], function(){}, 3)
+        var initialValue = 3;
+        reduce([1], function(accumulator, currentValue){
+            eq(3, initialValue);
+        }, initialValue)
+    },
+    'CurrentIndex should start at index 0 if an initialValue is provided.': function(){
+        var initialValue = 3;
+        reduce([1], function(accumulator, currentValue, currentIndex){
+            eq(0, currentIndex);
+        }, initialValue)
+    },
+    'If initialValue is provided, then accumulator will be equal to initialValue, and currentValue will be equal to the first value in the array.': function() {
+        var initialValue = 3;
+        reduce([1], function(accumulator, currentValue, currentIndex){
+            // console.log('acc: ', accumulator, 'initialVal: ', initialValue, 'currentIndex:', currentIndex);
+            eq(accumulator, initialValue);
+            eq(1 ,currentValue);
+        }, initialValue)
+    },
+    'If NO initialValue is provided, then accumulator will be equal to the first value in the array, and currentValue will be equal to the second.': function() {
+        reduce([1, 2], function(accumulator, currentValue, currentIndex){
+            // console.log('acc: ', accumulator, 'currentValue', currentValue, 'currentIndex:', currentIndex);
+            eq(1, accumulator);
+            eq(2 ,currentValue);
+        })
+    },
+    // what exactly are the features/elements of constructor functions?
+    'If the array is empty and no initialValue is provided, TypeError should be thrown.': function() {
+        reduce([], function(customTypeError){
+            console.log(customTypeError);
+            eq('Error: TypeError: Empty array', customTypeError);
+        })
+    },
+    // TODO: re-write this so I can remember/reference it: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#Returning_a_formatted_number
+    // TODO: also review map to understand the same pattern which I did not before
+    'If the array has only one element and no initialValue is provided, the solo value will be returned without calling callback.': function() {
+        var numberOfTimesCallbackRan = 0;
+        var theReturnValueOfReduce = reduce([1], function(){
+            numberOfTimesCallbackRan++;
+            // this is not supposed to run, duh!
+        })
+        eq(1, theReturnValueOfReduce);
+        eq(0, numberOfTimesCallbackRan);
+    }, 
+    'If initialValue is provided but the array is empty, the solo value will be returned without calling callback.':function(){
+        var initialValue = 3;
+        var soloValue = reduce([], function(){
+            console.log('hi');
+            // this should NOT console hi
+        }, initialValue)
+        eq(initialValue, soloValue);
+    }
+})
+
+
+</script>
+
+<!-- 75002Benoit -->
+
+<!-- 1FSG9SBuzGkfgugbTS_48ujMREOQVxj6_VqatAUrVVsD_zYUUpoSGsNmk -->
+
+<!-- https://script.google.com/macros/d/1FSG9SBuzGkfgugbTS_48ujMREOQVxj6_VqatAUrVVsD_zYUUpoSGsNmk/usercallback -->
+
+<!-- web url  -->
+<!-- https://script.google.com/macros/s/AKfycbwpxxrEa3RUwfKAFFfCOmF_-1eR3eJCb_vpYb-YsFXZeVJ9oEA/exec -->

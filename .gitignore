@@ -1,1 +1,7 @@
+#.git/info/exclude
+.gitignore
 .idea
+.DS_Store
+.vscode/
+premium_javascript/testing/array_methods/some_every_tests.html
+premium_javascript/testing/array_methods/findIndex0.html

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function  logTenNumbers() {
+        for (var i = 0; i < 10; i++) {
+            console.log(i);
+        }
+    }
+    // to run with debugger type into console:
+    // debugger;
+    // runOurFunction();
+
+
+    // paste the logTenNumbers into the runWithDebugger function
+    // this will enhance the behaviour of runWithDebugger
+    function runWithDebugger(ourFunction) {
+        debugger;
+        ourFunction();
+    }
+
+    // runWithDebugger(function  logTenNumbers() {
+    //     for (var i = 0; i < 10; i++) {
+    //         console.log(i);
+    //     	}
+    //     });
+
+    // debug and understand why this doesnt work
+    // runWithDebugger(setTimeout(Alarm(), 5000));
+
+    // built in function setTimeout will enhance the behaviour of any function you pass in
+    // in this case turning setTimeout into an alarm clock
+
+    setTimeout(function()  {
+        console.log('Wake Up!');
+    }, 5000);
+
+    // expirement
+    function Alarm() {
+        console.log('Wake up!');
+    }
+
+    function logName(name) {
+        console.log(name)
+        }
+        // the difference between
+        var test = logName();
+        test
+        // undefined
+        test === logName();
+        // true
+        logName();
+        // undefined
+        logName
+        // ƒ logName(name) {
+        //         console.log(name)
+        //         }
+        logName === logName();
+        // VM295:2 undefined
+        // false
+        logName === logName('Russia');
+        // VM295:2 Russia
+        // false
+
+
+    // var students = ['jonahtan', 'jenni', 'forest'];
+
+    // recreate built in forEach
+    function forEach(myArray, myFunction) {
+        for (var i = 0; i < myArray.length; i++) {
+            myFunction(myArray[i]);
+        }
+    }
+
+
+    // forEach(students, function(student) {
+    //     console.log(student);
+    // })
+
+    // forEach(students, logName)
+
+    // addEventListener
+    // https://developer.mozilla.org/en-US/docs/Web/Tutorials right click + inspect element
+
+    $0
+    // <h1>Tutorials</h1>
+    var tutorialsElement = $0;
+
+    tutorialsElement.addEventListener('click', function(event) {
+	    console.log(event);
+    });
+
+    tutorialsElement.addEventListener('click', function(event) {
+	    console.log(event);
+    });
+
+    // 'return' statement
+    // if you do not return a value from a function the value will return undefined
+
+    function multiplyTwoNumbers(a, b) {
+	    var result = a * b;
+    }
+
+    var theProductOf2And10 = multiplyTwoNumbers(2, 10);
+    theProductOf2And10
+    // undefined
+
+    function multiplyTwoNumbers(a, b) {
+	    var result = a * b;
+	    return result
+    }
+    theProductOf2And10
+    // 20
+</script>
+</body>
+</html>

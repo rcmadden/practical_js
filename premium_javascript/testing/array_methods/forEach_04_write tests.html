@@ -1,0 +1,100 @@
+<script src="../tinytest.js"></script>
+<script src="adder.js"></script>
+<script>
+
+// Example 1:
+// forEach([1,2,3], function() {
+    // console.log('hi');
+// })
+// Function 1:
+// function forEach(anArray, callabackFunction){
+//     for(var i = 0; i < anArray.length; i++) {
+//         callabackFunction();
+//     }
+// };
+
+// Example 2:
+// forEach([1,2,3], function(number) {
+    // console.log(number);
+// })
+
+// Funciton 1 & 2:
+// function forEach(anArray, callbackFunction){
+//     for(var i = 0; i < anArray.length; i++) {
+//         callbackFunction(anArray[i]);
+//     }
+// };
+
+// Example 3:
+// The index of the current element being processed in the array.
+// forEach([1,2,3], function(number, index) {
+//  for(var index = 0; index < anArray.length; index++)
+    // console.log(index);
+// })
+
+// Function 3 & 4
+// function forEach(anArray, callbackFunction){
+//     for(var i = 0; i < anArray.length; i++) {
+//         callbackFunction(anArray[i], i, anArray);
+//     }
+// };
+
+// Example 4:
+// The array that forEach() is being applied to.
+// forEach(anArray, function(number, index, anArray) {
+//  for(var index = 0; index < anArray.length; index++)
+    // console.log(anArray);
+// })  
+
+// TODO:  given each test write the(one) forEach to make them all pass.
+
+// TODO: given the forEach function, write each test
+// TODO: review/rewrite test for optional this argument
+
+function forEach(anArray, callbackFunction, optionalThisObject){
+    var forEachcCallBackFunction = callbackFunction;
+    if(optionalThisObject) {
+        // Want to bind optionalThis to the function
+        forEachcCallBackFunction = callbackFunction.bind(optionalThisObject);
+    }
+    for(var i = 0; i < anArray.length; i++) {
+        forEachcCallBackFunction(anArray[i], i, anArray);
+     }
+}
+
+// TODO: given the forEach (after re-written above) write tests to make each part pass
+
+tests({
+    'It should run the callback function array.length times.': function(){
+        var numberOfTimesCallbackRun = 0;
+        forEach([1,2,3], function(){
+            numberOfTimesCallbackRun++;
+        })
+        eq(numberOfTimesCallbackRun,3)
+    },
+    'It should pass the ith element as the first argument to the callback.': function() {
+        forEach([1], function(number){
+            eq(number, 1);
+        })
+    },
+    'It should pass the index of the ith element as the second argument to the callback.': function() {
+        forEach([1], function(number, index){
+            eq(index, 0);
+        })
+    },
+    'It should pass the array as the third argument to the callback.': function(){
+        var testArray = [1,2,3];
+        forEach(testArray, function(number, index, anArray){
+            eq(testArray, anArray);
+        })
+    },
+    'It should accept a configurable this object as an input.': function() {
+        forEach([1,2,3], function(){
+            this.description = 'Configurable this object';
+            eq('Configurable this object', description);
+        }), {description: 'Configurable this object'}
+    } 
+
+
+});
+</script>

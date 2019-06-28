@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>indexOf</title>
+    <script src='../simpletest.js'></script>
+</head>
+<body>
+<script>
+
+// Prototype
+// var array = [1,2,3]
+// var searchElement = 4
+
+// function myIndexOf(array, searchElement){
+//     for(var i = 0; i <= array.length; i++){
+//         if(array[i]===searchElement){
+//             console.log(array[i])
+//             return array[i]
+//         }
+//     } return -1
+// }
+
+    // 1. Let O be ToObject(this value).
+    // 2. ReturnIfAbrupt(O).
+    // 3. Let len be ToLength(Get(O, "length")).
+    // 4. ReturnIfAbrupt(len).
+    // 5. If len is 0, return −1.
+    // 6. If argument fromIndex was passed let n be ToInteger(fromIndex); else let n be 0.
+    // 7. ReturnIfAbrupt(n).
+    // 8. If n ≥ len, return −1.
+    // 9. If n ≥ 0, then
+    //     a. Let k be n.
+    // 10. Else n<0,
+    //     a. Let k be len - abs(n).
+    //     b. If k < 0, let k be 0.
+    // 11. Repeat, while k<len
+    // a. Let kPresent be HasProperty(O, ToString(k)).
+    // b. ReturnIfAbrupt(kPresent).
+    // c. If kPresent is true, then
+    //     i. Let elementK be Get(O, ToString(k)).
+    //     ii. ReturnIfAbrupt(elementK).
+    //     iii. Let same be the result of performing Strict Equality Comparison searchElement === elementK.
+    //     iv. If same is true, return k.
+    // d. Increase k by 1.
+    // 12. Return -1.
+// Description
+    // Returns the first index at which a given element can be found in the array, or -1 if it is not present.
+    // indexOf() compares searchElement to elements of the Array using strict equality 
+
+// Return Value
+    // Number
+    // The first index of the element in the array; -1 if not found.
+
+// Parameters
+    // searchElement
+    // fromIndex[optional]
+
+// Requirements
+
+    // 1. It should accept a searchElement as the 2nd parmeter as the element to locate in the array.
+    // 2. It should accept an optinal from index as the 3rd parameter as the index to start the search from. 
+    // 3. If the starting index is greater than or equal to the array's length -1 should be returned.
+    // 4. If the starting index is -1 it is taken as the offset from the end of the array, and searched from front to back.
+    // 5. If the starting index is 0 the whole array will be searched. [default is 0]
+    // 6. It should compare searchElement to elements in the array and return the index of the first occurrance of the searhElement.
+
+function indexOf(array, searchElement, optionalFromIndex){
+    // console.log(optionalFromIndex);
+    var startingIndex = optionalFromIndex;
+    
+    // if(array.length === 0){ // this will not cover an empty array: [,,,]
+    if(Object.keys(array).length === 0){
+        return -1;
+    }
+    // whys arguments instead of named value?
+    // if optionalInputValueVariable is 0 it coerces to true and != doesn't __? work?
+    // handle the NOT present case instead? does it make a diff?
+    if(arguments.length < 3){
+        startingIndex = 0;
+    }
+    // if optional index is a negative number
+    if(optionalFromIndex < 0){
+        startingIndex = (array.length) - Math.abs(optionalFromIndex);
+    } 
+    for(var i = startingIndex; i <= array.length; i++){
+        if(array[i]===searchElement){
+            return i
+        }
+    } return -1
+}
+
+tests({
+    '1. It should accept a searchElement as the 2nd parmeter as the element to locate in the array.':function(){
+        // it does not take a callback function
+        var array = [1,2,3];
+        var searchElement = 3;
+        var idx = indexOf(array, searchElement);
+        eq(idx, 2);
+    },
+    '2. It should accept an optional from index as the 3rd parameter as the index to start the search from.':function(){
+        var array = [1,2,3,1];
+        var searchElement = 1;
+        var fromIndex = 1;
+        var idx = indexOf(array, searchElement, fromIndex);
+        eq(idx, 3);
+
+    },
+    "3. If the starting index is greater than or equal to the array's length -1 should be returned.":function(){
+        var array = [1,2,3];
+        var searchElement = 1;
+        var fromIndex = 3;
+        var idx = indexOf(array, searchElement, fromIndex);
+        eq(idx, -1);
+    },
+    '4. If the starting index is -1 it is taken as the offset from the end of the array, and searched from front to back.':function(){
+        var array = [1,2,3,3];
+        var searchElement = 3;
+        var fromIndex = -1;
+        var idx = indexOf(array, searchElement, fromIndex);
+        eq(idx, 3);
+    },
+    '5. If the starting index is 0 the whole array will be searched. [default is 0]':function(){
+        var array = [1,2,3,3];
+        var searchElement = 3;
+        var fromIndex = 0;
+        var idx = indexOf(array, searchElement, fromIndex);
+        eq(idx, 2);
+    },
+    '6. It should compare searchElement to elements in the array and return the index of the first occurrance of the searhElement.':function(){
+        var array = [1,2,3,3];
+        var searchElement = 3;
+        var idx = indexOf(array, searchElement);
+        eq(idx, 2);         
+    },
+    '7. It should return -1 if the array length is 0.':function(){
+        var array = [];
+        var idx = indexOf(array);
+        eq(idx, -1);
+    },
+    '8. It should return -1 if the array is empty(there are only holes in the array).':function(){
+        var array = [,,,];
+        var idx = indexOf(array);
+        eq(idx, -1);
+    },
+    // edge case checks (no code added to functoin to get these to pass.)
+    '9. It should include holes in the array.':function(){
+        var array = [,,3,3];
+        var searchElement = 3;
+        var idx = indexOf(array, searchElement);
+        eq(idx, 2);
+    },
+    '10. It should return -1 if the searchElement is not found in the array.':function(){
+        var array = [1,2,3];
+        var searchElement = 0;
+        var idx = indexOf(array, searchElement);
+        eq(idx, -1);
+    },
+
+
+})
+
+
+</script>
+</body>
+</html>

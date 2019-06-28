@@ -1,0 +1,124 @@
+<script src="../tinytest.js"></script>
+<script src="adder.js"></script>
+<script>
+
+// testing the filter implementation 
+function filter(originalArray, callback, optionalThis) {
+    var filterCallback = callback;
+    var filteredArray = [];
+    
+    if(optionalThis){
+        filterCallback = callback.bind(optionalThis);
+    }
+	for(var i = 0; i < originalArray.length; i++) {
+        // only adds items where the callback returns true
+        if(filterCallback(originalArray[i], i, originalArray)) {
+           filteredArray.push(originalArray[i]);
+        }
+    }
+    return filteredArray;
+}
+
+// Example 1:
+// filter(['spray', 'limit'], function() {
+// 	console.log('hi');
+// })
+
+// Example 2:
+// myFilter(words, function(element) {
+	// console.log(element)
+// })
+
+// Example 3:
+// myFilter(words, function(element, index) {
+	// console.log(index)
+// })
+
+// Example 4:
+// optional this
+
+// Example 5:
+// CallbackFunction is a predicate, to test each element of the array. 
+// Return true to keep the element, false otherwise.
+
+// Example 6:
+// A new array with the elements that pass the test. 
+// If no elements pass the test, an empty array will be returned.
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function() {});
+// testArray! == filteredArray;
+
+// Example 7:
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function(element) {
+//     return element > 1;
+// });
+// Explect filteredArray to be [2,3]
+
+// look for common things returned from functions to use in all tests
+
+tests({
+    'It should run the callback array.length times': function() {
+        var numberOfTimesCallBackRan = 0;
+        filter(['spray', 'limit'], function() {
+	        numberOfTimesCallBackRan++;
+        });
+        eq(2, numberOfTimesCallBackRan);
+    },
+
+    'It should pass the ith element in the array as the first argument to the callback.': function() {
+        filter(['spray'], function(element) {
+	        eq(element, 'spray');
+        });
+    },
+
+    'It should pass the index as the second argument to the callback.': function() {
+        filter(['spray'], function(element, index) {
+	        eq(index, 0);
+        });
+    },
+
+    'It should pass the array as the third argument to the callback.': function() {
+        var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
+        filter(words, function(element, index, array) {
+	        eq(array, words);
+        });
+    },
+
+    'It should accept a optional this object.': function() {
+        var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
+        filter(words, function() {
+            eq(this.description, 'Optional this value.')
+        }, {description: 'Optional this value.'});
+    },
+// [34:50]
+        // 'It should return a new array, not the array being filtered': function() {
+        //     var testArray = [];
+        //     var filteredArray = filter(testArray, function() {});
+        //     eq(Array.isArray(filteredArray), true);
+        //     // comparing 2 objects
+        //     // eq(testArray !== filteredArray, true);
+        //     console.log(testArray, filteredArray);
+        //     notEq(testArray, filteredArray);
+        // },
+    // [40:39]
+        'It should return an array.': function(){
+            var filteredArray = filter([], function() {});
+            eq(Array.isArray(filteredArray),true);
+        },    
+
+    // [45:]
+    'It should return a new array, not the array being filtered.': function() {
+        var arrayBingFiltered = [];
+        var filteredArray = filter(arrayBingFiltered, function(){});
+        eq(filteredArray !== arrayBingFiltered, true);
+    },
+    'It should return a new array that only has elements where callback() is true.': function() {
+        var filteredArray = filter([1,2], function(number){
+            return number > 1;
+        });
+        eq(filteredArray.length, 1);
+        eq(filteredArray[0], 2);
+    }
+});
+</script>>
