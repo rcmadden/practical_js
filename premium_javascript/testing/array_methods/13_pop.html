@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>pop()</title>
+    <script src=../../simpletest.js></script>
+</head>
+<body>
+<script>
+
+// Prototype (without splice)
+    //function myPop(array){
+// 	var newArrayLength = array.length -1;
+// 	result = array[array.length -1]
+// 	array.length = newArrayLength
+// 	return result;
+// }
+
+// Description
+    // removes the last element from an array and returns that element. 
+    // This method changes the length of the array.
+// Return Value
+    // The removed element from the array; 
+    // undefined if the array is empty.
+
+// Requirements
+    // It should accept an array as the first parameter passed in.
+    // If you call pop() on an empty array, it returns undefined.
+    // It should remove the last element from the array.
+    // It should return the element removed from the array.
+
+function pop(array){
+    var newArrayLength = array.length -1;
+    result = array[array.length -1]
+    array.length = newArrayLength;
+    return result;
+}
+
+tests({
+    'It should accept an array as the first parameter passed in.':function(){
+        var array = ['one', 2];
+        var result = array.pop();
+        eq(true, Array.isArray(array));
+    },
+    'It should return the last element removed from the array.':function(){
+        var array = [1, 'two'];
+        var result = array.pop();
+        eq('two', result);
+    },
+    'It should remove the last element from the array.':function(){
+        var array = [1, 'two'];
+        var result = array.pop();
+        eq(undefined, array[1]);    
+    },
+    'If you called on an empty array, it should return undefined.':function(){
+        var array = [];
+        var result = array.pop();
+        eq(undefined, result);
+    },
+    'It should remove empty elements from the aray':function(){
+        var array = [,,,]
+        var result = array.pop();
+        console.log(result);
+        console.log(array);
+        eq(undefined, result);
+    }
+    
+    
+})
+
+
+
+
+
+</script>
+</body>
+</html>

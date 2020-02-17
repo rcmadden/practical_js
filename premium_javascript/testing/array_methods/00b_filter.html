@@ -1,0 +1,127 @@
+<script src="../tinytest.js"></script>
+<!-- <script src="adder.js"></script> -->
+<script>
+// TODO: Read Docs .filter()
+// callback function is a predicate, to test each element of the array. 
+// Returns true to keep the element, false otherwise.
+
+// Example 1:
+// filter([1,2,3], function() {});
+// Funciton 1: /* NO! Test logic should be in the test */
+// function filter(array, callback){
+//     var numberOfTimesCallbackRan = 0;   /* test */
+// 	for(var i = 0; i < array.length; i++) {
+// 		// callback(array[i]); 
+//         numberOfTimesCallbackRan++;     /* test */
+//    } return numberOfTimesCallbackRan;   /* test */
+// }
+
+// Example 2:
+// filter([1,2,3], function(number) {
+    // console.log(number);
+// })
+// Function 2:
+// function filter(array, callback){
+// 	for(var i = 0; i < array.length; i++) {
+//         callback(array[i]);
+//    }
+// };
+
+// Example 3:
+// filter([1,2,3], function(number, index) {
+//  for(var index = 0; index < anArray.length; index++)
+    // console.log(index);
+// })
+
+// Example 4:
+// filter(anArray, function(number, index, originalArray) {
+//  for(var index = 0; index < anArray.length; index++)
+    // console.log(originalArray);
+// })  
+
+// Example 5:
+// filter([1,2,3], funtion() {
+    // console.log(this.name);
+    // }, {name: 'Russia'});
+// })
+
+// The filter() method creates a new array 
+// Example 6: [21:25]
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function() {});
+// testArray !== filteredArray
+
+// Example 7:
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function(element){
+    // return element > 1;
+// });
+// expect filteredArray to be [2,3]
+
+// TODO: Video 4. forEach [10:09] sketching out configurale this object
+// Practice:
+    // Write each test from simplest leading up to haedest
+    // Check If configurableThisOject exists
+    // Want to bind configurableThisOject to the callback function
+    // jQuery TodoMVC .bind review bindEvents methods pointing to App object https://github.com/tastejs/todomvc/blob/gh-pages/examples/jquery/js/app.js
+    // Todos app using configurable this
+    // Read the docs: The bind() method creates a new function that, when called, has its this keyword set to the provided value docs https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+    // now write the if statement
+    // ....bind creates a new function... account for this
+    // review the docs again after building your own forEach
+function filter(array, callback, optionalConfigurableThisObject){
+    
+    var filterCallback = callback;
+    // TODO: forEach [14:08]
+    if(optionalConfigurableThisObject) {
+        filterCallback = callback.bind(optionalConfigurableThisObject);
+    } 
+    for(var i = 0; i < array.length; i++) {
+        filterCallback(array[i], i, array);
+        }
+};
+
+tests({
+    'It should run array.length times': function() {
+        var numberOfTimesCallbackRan = 0;
+        filter([1,2,3], function(el){
+            numberOfTimesCallbackRan++;   
+        }); eq(numberOfTimesCallbackRan, 3);
+    },
+    'It should pass in the ith element as the first argument to the callback':function() {
+        filter([1], function(number){
+            eq(number, 1);
+        })
+    },
+    'It should pass in the index as the second argument to the callback': function() {
+        filter([1], function(number, index){
+            eq(index, 0);
+        })
+    },
+    'It should pass in the original array as the third function to the callback': function(){
+        var array = [1,2,3];
+        filter(array, function(number, index, originalArray) {
+            eq(originalArray, array);
+        })
+    },
+    'It should accept an optional configurable this object': function() {
+        // TODO: review video forEach sketching process
+        // forEach(/*array*/, /*callback*/, /*configurableThis*/);
+        // forEach([1], funcion() {}, {} );
+        // TODO: FILTER [6:30] optional this process
+        // TODO: PRACTICE READING THE DOCS LIKE THIS: Filter [1:45]
+        filter([1],function(){
+            console.log(this.name);
+            eq(this.name, 'Russia');
+            // eq(optionalThis, 'Configurable this object');    
+        //     }), {description: optionalThis} 
+        }, {name: 'Russia'});
+    },
+//     '': function() {
+//     var filteredArray = [1,2,3].filter(function(element, index, array) {
+//     return false;
+// }
+// })
+});
+</script>>
+

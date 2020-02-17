@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>join()</title>
+    <script src=../../simpletest.js></script>
+</head>
+<body>
+<script>
+
+// Prototype
+// function join(arrayLikeValue){
+//     var returnString = '';
+//     for(var i = 0; i < arrayLikeValue.length; i++) {
+//         returnString = returnString += arrayLikeValue[i];
+//     }
+// 	return returnString;
+// }
+
+// Description
+    // creates and returns a new string by concatenating all of the elements in an array 
+    // (or an array-like object), separated by commas or a specified separator string
+
+// Parameters
+    // seperator [optional]
+
+// Return Value
+    // String
+
+// Requierements
+// It should accept a value as the first parameter to be concatonated.
+// It should return a string.
+// If arr.length is 0, the empty string is returned.
+// It should accept an optional seperator as the second paramter to be used as the be used between values.
+// If the array has only one item, then that item will be returned without using the separator.
+// If an element is undefined or null, it is converted to the empty string.
+// If no separator is provided, a single comma is used as the separator.
+// If separator is an empty string, all elements are joined without any characters in between them.
+
+function join(arrayLikeValue, optionalSeperator){
+    var returnString = '';
+    var nextValue = 0;
+    if(Array.isArray(arrayLikeValue) === false){
+        throw new TypeError('"'+ arrayLikeValue + '"' +'.join is not a function');
+        // return typeErrorInstance;
+    }
+    if(arguments.length<2){
+        var separator = ',';
+    } else {
+        var separator = optionalSeperator;
+    }
+    for(var i = 0; i < arrayLikeValue.length; i++) {
+        nextValue = arrayLikeValue[i+1];
+            if(nextValue !== undefined && (arrayLikeValue[i] === undefined || arrayLikeValue[i] === null)){
+                returnString = returnString += '';
+            } else if (nextValue !== undefined){
+                if(nextValue !== null){
+                    returnString = returnString += arrayLikeValue[i] + separator;
+                } 
+                if(nextValue === null){
+                    returnString = returnString += arrayLikeValue[i];
+                }
+            } else {
+                if(arrayLikeValue[i] === undefined || arrayLikeValue[i] === null){
+                    returnString = returnString += '';
+                } else {
+                    returnString = returnString += arrayLikeValue[i];
+                    }
+                } 
+    }
+    return returnString;
+}
+
+tests({
+    'It should accept a value as the first parameter to be concatonated.':function(){
+        var array = ['a'];
+        var result = join(array);
+        eq('a',result);
+    },
+    'It should return a string.':function(){
+        var array = [1];
+        var result = join(array);
+        eq(true, typeof(result)==='string');
+    },
+    'If arr.length is 0, the empty string is returned.':function(){
+        var array = [];
+        var result = join(array);
+        eq('', result);
+    },
+    'If no separator is provided, a single comma is used as the separator.':function(){
+        var array = ['a', 'bc','def'];
+        var result = join(array);
+        eq('a,bc,def',result);
+    },
+    'It should accept an optional seperator as the second paramter to be used as the be used between values.':function(){
+        var array = [1,23,4];
+        var result = join(array, ':');
+        eq('1:23:4', result);
+    },
+    'If the array has only one item, then that item will be returned without using the separator.':function(){
+        var array = ['a'];
+        var result = join(array, ':');
+        eq('a', result);
+    },
+    'If an element is undefined or null, it is converted to the empty string.':function(){
+        var array = [,null];
+        var result = join(array);
+        eq('', result);
+    },
+    'If separator is an empty string, all elements are joined without any characters in between them.':function(){
+        var array = [1,2,'three'];
+        var result = join(array,'');
+        eq('12three', result);
+    },
+    'It should throw a type error if a string is passed as the first paramater.':function(){
+        var arrayString = 'russia';
+        var isTypeError = false;
+        try {
+            var result = join(arrayString);    
+        } catch (error) {
+            isTypeError = (error instanceof TypeError);
+        }
+        eq(true, isTypeError);
+    }
+})
+</script>
+</body>
+</html>

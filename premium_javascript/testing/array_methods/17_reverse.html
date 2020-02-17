@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>reverse()</title>
+    <script src=../../simpletest.js></script>
+</head>
+<body>
+<script>
+// Prototype
+    // NOT-In Place / OUT Of Place
+    // function reverse(array){    
+    // var reverseOrder = array.length;
+    // var tempArray = [];
+    // for(var i = 0; i < array.length; i++){
+    //     reverseOrder = reverseOrder -= 1;
+    //     tempArray[i] = array[reverseOrder]
+    //     }
+	// return tempArray;
+    // }
+    // IN-PLACE
+//     function reverseInPlace(array){
+//     var tmp = 0;
+//     var n = array.length;
+//     var tempArray = [];  
+//     for(var i = 0; i < array.length/2; i++){
+//     	tmp = array[i];  
+// 		array[i] = array[n - 1 - i]; // assigns last element in array to first
+// 		array[n - 1 - i] = tmp; 
+		
+//     }
+// 	return array;
+// }
+    // tempArray
+    //IN-PLACE
+    // No auxilary data structure
+    // Yes auxilary variables
+    // Input is overwritten by the output during execution
+    // updates input sequence only through replacement or swapping of elements.
+    // STRICT:
+        // can only have a constant amount of extra space, 
+        // counting everything including function calls and pointers.
+        // this form is very limited as simply having an index to a length n array requires O(log n) bits???
+    // BROAD:
+        // does not use extra space for manipulating the input 
+        // but may require a small though nonconstant extra space for its operation. ??
+        // Usually, this space is O(log n), though sometimes anything in o(n) is allowed ??
+        // some stuff about space complexity/counting numbr of indexes and ignoring length??
+        // may or may not count the output as part of its space usage since it overwrites its input with output
+        // stuff about ignoring outspace for write only memory, streams, and log-space reductions? 
+        
+
+// Description
+    // reverses an array in place. The first array element becomes the last, and the last array element becomes the first.
+    // The reverse method transposes the elements of the calling array object in place, 
+    // mutating the array, 
+    // and returning a reference to the array.
+
+    // in place algorithm-big(o)notation
+
+// Return Value
+    // The reversed array.
+    // var array = [1,2,3,4,5,6];
+function reverse(array){
+    var tmp = 0;
+    var n = array.length;
+    for(var i = 0; i < array.length/2; i++){
+    	tmp = array[i];  // assigns first element in array to tmp
+		array[i] = array[n - 1 - i]; // assigns last element in array to first
+        array[n - 1 - i] = tmp; 
+    }
+	return array;
+}
+
+tests({
+    'It should accept an array as the first paramter passed in.':function(){
+        var array = [1,2,3];
+        var result = reverse(array);
+        // console.log(result);
+        eq(result, array);
+    },
+    'It should should return an array.':function(){
+        var array = ['h','a','r','p','o'];
+        var result = reverse(array);
+        // console.log(result);
+        eq(Array.isArray(result), true);
+    },
+    'It should reverse the elements in the array.':function(){
+        var array = [1,2,3];
+        var result = reverse(array);
+        // console.log(result);
+        eq(result[0], 3);
+        eq(result[1], 2);
+        eq(result[2], 1);        
+    },
+    'It should include undefined and empty values when passed in.':function(){
+        // var array = [,null,undefined,NaN];
+        var array = [,null];
+        var result = reverse(array);
+        // console.log(result);
+        eq(result[0], null);
+        eq(result[1], undefined);
+    }
+    
+})
+</script>
+</body>
+</html>
+	
+
