@@ -58,14 +58,14 @@ var TinyTest = {
         var failures = 0;
         var successes = 0;
         for (var testName in tests) {
-            var testAction = tests[testName];      
+            var testAction = tests[testName];    
             try {
                 testAction.apply(this);
                 successes++;
                 console.log('%c' + testName, "color: green;"); 
             } catch (e) {
                 failures++;
-                console.groupCollapsed('%c' + testName, "color: red;");
+                // console.groupCollapsed('%c' + testName, "color: red;");
                 console.error(e.stack);
                 console.groupEnd();
             }
