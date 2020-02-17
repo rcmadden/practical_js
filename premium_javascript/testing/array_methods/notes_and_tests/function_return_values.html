@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// In JavaScript, functions are first-class objects, 
+// because they can have properties and methods just like any other object.
+
+// To return a value other than the default,   
+// what is the default return value? undefined
+
+// Arguments are passed to functions by value. ?? What are positional arguments? return values?
+
+// If the function changes the value of an argument, this change is not reflected globally 
+// or in the calling function
+
+/* Declare the function 'myFunc' */
+function myFunc(theObject) {
+  theObject.brand = "Toyota";
+}
+
+/*
+ * Declare variable 'mycar';
+ * create and initialize a new Object;
+ * assign reference to it to 'mycar'
+ */
+var mycar = {
+  brand: "Honda",
+  model: "Accord",
+  year: 1998
+};
+
+/* Logs 'Honda' */
+console.log(mycar.brand);
+
+/* Pass object reference to the function */
+myFunc(mycar);
+
+/*
+ * Logs 'Toyota' as the value of the 'brand' property
+ * of the object, as changed to by the function.
+ */
+console.log(mycar.brand);
+
+//object references are values, and are special: 
+// if the function changes the referred object's properties, 
+// that change is visible outside the function
+
+//mycar is the object reference?
+
+// Defining Functions
+
+    // Function declaration
+    function nameOfFunction(optionalParameters){
+        //statements
+    }
+    // Function expression
+    var myFunction = function(optionalParameters){
+        // statements
+    }
+    // may be part of a larger expression, be anonymous, assigned to a vaiable, or named?
+    // wouldn't a named function expression be a declared function?
+
+    // Statements involving functions which do not start with "function" 
+    // are function expressions, like these 2:
+    var myFunction = function(){
+        //statements
+    }
+    var myFunction = function namedFunction(){
+        //statements
+    }
+// IIFE (Immediately Invokable Function Expression) Functions used oly once
+// Generator functions* (WTF are these?)
+
+// Arrow function expression
+optioinalParameters => {
+    // statements
+};
+
+optionalParameter => expression
+// 
+
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#The_arrow_function_expression_(%3E)
+</script>
+
+</body>
+</html>

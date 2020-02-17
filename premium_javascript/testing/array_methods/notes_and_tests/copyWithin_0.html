@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>copyWithin()</title>
+    <script src="../../simpletest.js"></script>
+</head>
+<body>
+<script>
+// Prototype
+    // var array = [1,2,3];
+// function myCopyWithin(array){
+//     var next = 0;
+//     var target = 1 - 1;
+//     var arrayLength = Math.floor(array.length/2)
+//     for(var i = 0; i < arrayLength; i++){
+//         console.log(array);
+//         target = target + 1;		
+//         next = array[target];
+//         array[target] = array[i];
+//         if(array[target + 1] === undefined){
+//              return array;
+//             console.log(array);
+//         } else {
+//             array[target + 1] = next;
+//         }
+//     } return array;
+// }
+// Description 
+    // shallow copies part of an array to another location in the same array 
+    // and returns it without modifying its length
+// Parameters
+    // target - index at which to copy the sequence to.
+    // start - index at which to start copying elements from, default 0.
+    // end - index at which to end copying elements from, default to end of array.
+
+// Requirements
+    // It should accept a target as the index at which to copy the sequence to,
+    // If the target is negative, target will be counted from the end.
+    // If target is at or greater than arr.length, nothing will be copied. 
+    // If target is positioned after start, the copied sequence will be trimmed to fit arr.length.
+    // If negative, start will be counted from the end.
+    // If start is omitted, copyWithin will copy from index 0. 
+    // copyWithin copies up to but not including end. 
+    // If negative, end will be counted from the end.
+    // If end is omitted, copyWithin will copy until the last index (default to arr.length).
+    // pasted sequence will have the copied values even when the copy and paste region overlap.
+    // It does not alter the length of this, but it will change its content and create new properties, if necessary.
+// Return Value
+    // mutatated array
+
+//     var next = 0;
+//     var target = 2 - 1;
+// 	var arrayLength = Math.floor(array.length/2)
+//     for(var i = 0; i < arrayLength; i++){
+//         console.log(array);
+// 		target = target + 1;		
+//         next = array[target];
+//         array[target] = array[i];
+//         if(array[target + 1] === undefined){
+// 			return array;
+//         } else {
+//             array[target + 1] = next;
+//         }
+//     } return array;
+// }
+
+function copyWithin(array, optionalTarget, optionalStartIndex, optionalEndIndex){
+    var arrayLength = Math.floor(array.length/2)
+    var target = 0;
+    var startIndex = 0;
+    var endIndex = 0;
+    var next = 0;
+    if(arguments.length < 2) {
+        return array;
+    }
+    // } else if (arguments.length < 3){
+    //     target = optionalTarget;
+    //     var next = 0;
+    //     console.log('optionalTarget');
+    //     for(var i = 0; i < array.length/2; i++){
+    //         console.log('target:', target);
+    //         if(i === target){
+    //             next = array[i];
+    //             array[i] = array[i - 1];
+    //             array[i - 1] = next;
+    //         }
+    //     } return array;
+    // } else if (arguments.length < 4){
+    //     startIndex = optionalStartIndex;
+    //     console.log('optionalStart');
+    // } else if (arguments.length < 5){
+    //     endIndex = optionalEndIndex;
+    //     console.log('optionalEnd');
+    // }
+    if(optionalTarget){
+        target = optionalTarget - 1;
+    }
+    for(var i = 0; i < array.length; i++){
+        target = array[target];
+        if(i === target){
+            array[i] = array[target];
+            // console.log('target');
+            // console.log(array);
+            target = target + 1;		
+            next = array[target];
+            array[target] = array[i];
+            if(array[target + 1] === undefined){
+                return array;
+            } else {
+                array[target + 1] = next;
+            }
+        }
+        return array;
+    }
+}
+
+tests({
+    'It should accept an array as the first parmater passed in.':function(){
+        var array = [1,2,3];
+        result = copyWithin(array);
+        eq(array, result);
+    }, 
+    'It should accept a target index as the second parameter to pass in.':function(){
+        var array = [1,2,3];
+        var target = 2;
+        result = copyWithin(array, target);
+        console.log(result);
+        // console.log(array);
+        eq(array[1], 2);
+        eq(array[2], 1);
+    },
+    'It should accept a start index as an optional third element passed in.':function(){
+        var array = [1,2,3];
+        var target = 0;
+        var start = 0;
+        result = copyWithin(array, target, start);
+        // console.log(result);
+        // console.log(array);
+        eq(array, result);
+    },
+    'It should accept an end index as an optional fourth element passed in.':function(){
+        var array = [1,2,3];
+        var target = 0;
+        var start = 0;;
+        var end = 0;
+        result = copyWithin(array, target, start,end);
+        // console.log(result);
+        // console.log(array);
+        eq(array, result);
+    }
+
+})
+
+</script>
+</body>
+</html>

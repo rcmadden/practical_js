@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src='../../simpletest.js'></script>
+    <title>Document</title>
+</head>
+<body>
+<script>
+    // wikipedia prototype: https://en.wikipedia.org/wiki/In-place_algorithm
+    // function reverse_in_place(a[0..n-1])
+    //      for i from 0 to floor((n-2)/2)
+    //          tmp := a[i]
+    //          a[i] := a[n − 1 − i]
+    //          a[n − 1 − i] := tmp
+    function reverse_in_place(array){
+        var arrayLength = array.length;
+        // for(var i = 0; i < (Math.floor((arrayLength-2)/2)); i++){
+        for(var i = 0; i < (Math.floor(arrayLength/2)); i++){
+            var tmp = array[i];
+            array[i] = array[arrayLength - 1 - i];
+            array[arrayLength - 1 - i] = tmp;
+        }
+    }
+
+    var array1 = [1, 30, 4, 21, 100000];
+    reverse_in_place(array1);
+
+    console.log('expected output:     [100000, 21, 4, 30, 1]')
+    console.log('actual output:',array1);    
+
+    tests ({
+        'It should reverse this array in place':function(){
+            var array = [1, 30, 4, 21, 100000]
+            var result = reverse_in_place(array);
+            eq(array[0], 100000);
+            eq(array[1], 21);
+            eq(array[2], 4);
+            eq(array[3], 30);
+            eq(array[4], 1);
+        }
+    })
+</script>
+</body>
+</html>
+

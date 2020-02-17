@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>slice</title>
+    <script src=../../simpletest.js></script>
+</head>
+<body>
+<script>
+
+// Prototoype
+
+// var newArray = [];
+// function mySlice(begin){
+// 	for(var i = begin; i < fruits.length; i++){
+// 		newArray.push(fruits[i]);
+// 	}
+// 	return newArray;
+// }
+
+// Description
+    // Returns a shallow copy of a portion of an array into a new array object 
+    // selected from begin to end (end not included). 
+    // The original array will not be modified.
+// Parameters
+    // begin [optional]
+    // end [optional]
+
+// Return Value
+    // A new array
+
+// Requirements
+    // validate the meaning of this in the native slice function:
+        // The slice function is intentionally generic; it does not require that its this value be an Array object
+    // It should accept a value as the first parameter as the array to be selected from.
+    // NO: It should return a shallow copy of the original array. It does NOT return a "shallow copy" it returns a copy
+    // If no start parameter is passed, it should return a copy of the original array, and begin starts at index 0.
+
+    // It should accept an optional start parameter as the second argument to the method that returns an array containing the elements of the array from element start to the end of the array.
+    // It should accept an optional end parameter as the third argument to the method that returns an array containing the elements of the array from element start up to, but not including, element end.    
+    // If start is negative, it is treated as length + start where length is the length of the array. 
+    // If end is negative, it is treated as length + end where length is the length of the array.
+    // If begin is greater than the length of the sequence, an empty array is returned.
+
+    // It should not alter the orginal array.
+
+    // For object references (and not the actual object), slice copies object references into the new array. 
+    // Both the original and new array refer to the same object. 
+    // If a referenced object changes, the changes are visible to both the new and original arrays.
+    // For strings, numbers and booleans (not String, Number and Boolean objects), slice copies the values into the new array. 
+    // Changes to the string, number or boolean in one array do not affect the other array.
+    // If a new element is added to either array, the other array is not affected.
+
+    // Array-like objects
+
+    // Strealining cross-browswer behavior
+        // host objects (such as DOM objects)?
+        // conversted by Array.protobype.slice (IE < 9)
+
+    // Edge Cases
+        // Spec NOTE2: ...became unnecessary starting in ES2015 
+        // when the result Array was initialized to its proper length 
+        // rather than an empty Array?? test this. can I improve previous code with this concept?
+
+var newArray = [];
+function slice(array, optionalStartingIndex, optionalEndingIndex){
+    var startingIndex = 0;
+    var endIndex = array.length;
+    var newArray = [];
+    if(optionalEndingIndex){
+        if(Math.sign(optionalEndingIndex) === -1){
+            endIndex = array.length + optionalEndingIndex;
+        } else {
+            endIndex = optionalEndingIndex;
+        }   
+    }
+    if(optionalStartingIndex){
+        if(Math.sign(optionalStartingIndex) === -1){
+            startingIndex = endIndex + optionalStartingIndex;
+        } else {
+            startingIndex = optionalStartingIndex;
+        }
+    }
+    // https://www.ecma-international.org/ecma-262/6.0/#sec-array.prototype.slice step #12
+    if(arguments.length < 2){
+        newArray = array;
+        return newArray;
+    }
+	for(var i = startingIndex; i < endIndex; i++){
+		newArray.push(array[i]);
+	}
+	return newArray;
+}
+// var a = [1, 2, 3];
+// a.slice(0, 1);
+// console.log(a);
+
+tests({
+    'It should accept a value as the first parameter as the array to be selected from.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        // var animals = ['russia']
+        var result = slice(animals);
+        eq(animals.length, result.length)
+    },
+    'If no start parameter is passed, it should return a copy of the original array.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        var result = slice(animals);
+        eq(animals, result);
+    },
+    'It should accept an optional start parameter as the second argument to the method that returns an array containing the elements from element start to the end of the array.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        var result = slice(animals, 4);
+        eq('elephant', result);
+    },
+    'It should accept an optional end parameter as the third argument to the method that returns an array containing the elements from start up to, but not including, element end.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        var result = slice(animals, 1, 2);
+        eq('bison', result);
+    },
+    'If start is negative, it is treated as length + start where length is the length of the array.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        var result = slice(animals, -2);
+        eq('duck', result[0]);
+        eq('elephant', result[1]);
+    },
+    'If end is negative, it is treated as length + end where length is the length of the array.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        var result = slice(animals, 0, -3);
+        eq('ant', result[0]);
+        eq('bison', result[1]);
+    },
+    'If begin is greater than the length of the sequence, an empty array is returned.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        var result = slice(animals, 8);
+        eq(true, result.length === 0);
+    },
+    'It should not alter the orginal array.':function(){
+        var animals = ['ant', 'bison', 'camel'];
+        var result = slice(animals);
+        eq(animals, result);
+    },
+
+    'It should return an array containing the elements of the array from element start up to, but not including, element end.':function(){
+        var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+        var testResult = ['camel', 'duck', 'elephant'];
+        var result = slice(animals, 2);
+        eq(result[0], testResult[0]);
+        eq(result[1], testResult[1]);
+        eq(result[2], testResult[2]);
+    }
+
+
+})
+
+</script>    
+
+</body>
+</html>

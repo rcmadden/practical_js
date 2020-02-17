@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src='../simpletest.js'></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+<script>
+// Prototype 
+// Attempt 1: passes either test 2 or 3 when adjusted
+    // function splice(array, startingIndex){
+    //     var fromIndexZero = 0;
+    //     var arrayLength = array.length;
+
+    //     if(startingIndex > arrayLength) {
+    //         startingIndex = arrayLength;
+    //         array = array.slice(startingIndex);
+    //     }
+    //     array = array.slice(startingIndex);
+        
+    //     return array;
+    // }
+// Attempt 2
+    // var array = ['Jan', 'March', 'April'];
+    // var startIndex = 1;
+    // function mySplice(array, startIndex){
+    // 	var deleteCount = array.length - (array.length - startIndex);
+    // 	var deletedItems = [];
+    // 	for(var i = 0; i < startIndex; i++){
+    // 		deletedItems.push(array[i]);
+    //     }
+    // 	return deletedItems;
+    // }
+
+// Definition
+    // method changes the contents of an array by removing or replacing existing elements 
+    // and/or adding new elements in place.
+
+// Parameters
+    // start - index at which to start changing the array.
+    // deleteCount [Optional] - An integer indicating the number of elements in the array to remove from start.
+    // item1, item2, ... Optional - elements to add to the array.
+// Return Value
+    // An array containing the deleted elements. 
+    // If only one element is removed, an array of one element is returned. 
+    // If no elements are removed, an empty array is returned.
+
+// Requirements
+    // It should accept an index at which to start changing the array. 
+    // If start is greater than the length of the array, start will be set to the length of the array. 
+    // If start is negative, it will begin that many elements from the end of the array (with origin -1, meaning -n is the index of the nth last element and is therefore equivalent to the index of array.length - n). 
+    // If the absolute value of start is greater than the length of the array, it will begin from index 0. 
+   
+    // Optional delte count should be an integer indicating the number of elements in the array to remove from start.
+    // If deleteCount is omitted, or if its value is equal to or larger than array.length - start (that is, if it is equal to or greater than the number of elements left in the array, starting at start), then all the elements from start to the end of the array will be deleted.
+    // If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element.
+   
+    // It should accept optional items to add to the array.
+    // The elements to add to the array, beginning from start. 
+    // If you do not specify any elements, splice() will only remove elements from the array.
+    // If the specified number of elements to insert differs from the number of elements being removed, the array's length will be different at the end of the call. 
+   
+    // It should return an array containing the deleted elements. 
+    // If only one element is removed, an array of one element is returned. 
+    // If no elements are removed, an empty array is returned.
+
+function splice(array, startIndex, optionalDeleteCount, optionalItems){
+    var arrayLength = array.length;
+    var deletedItems = [];
+    var startIndexIsNegative = false;
+    var deletCount = 0;
+
+    var tempCurrent;
+    var tempNext;
+    var tempNextMinusOne;
+
+    if(arguments.length >= 4){ // insertItems
+        // get the number of arguments >= 4
+        var insertItem = optionalItems; // TODO: should this be an array?
+        var insertItemCount = (arguments.length + 1) - 4;
+        // TODO: newArrayLength = arrayLength + insertItemCount
+        for(var i = startIndex; i < arrayLength + insertItemCount - 1; i++){
+            // if(i === startIndex){
+            if(i >= startIndex && i <= startIndex + insertItemCount){ 
+                for(var j = 0; j < insertItemCount; j++){
+                    tempCurrent = array[i]; 
+                    // array[i] = insertItem; 
+                        array[i] = arguments[3 + j]; 
+               
+                    if(i === arrayLength - 2){ // if second to last item in the array
+                        tempNextMinusOne  = tempNext;
+                        tempNext = array[i + 1];
+                        array[i + 1] = tempCurrent;
+                    } else {
+                        if (array[i+1] !== undefined){
+                            tempNext = array[i + 1];
+                        } else {
+                            tempNext = tempNext;
+                        }
+                        array[i + 1] = tempCurrent;
+                    }
+                    i++;
+                }
+            } else {
+                array[i] = tempNextMinusOne; // works for the (next to last) and last element
+                // tempNext = array[i + 1];
+                // array[i + 1] = tempCurrent;
+                array[i + 1] = tempNext;
+            }
+        } //return deletedItems;
+    }
+
+    if(arguments.length >= 3){ // deleteCount
+        if(typeof(optionalDeleteCount) !== "number"){
+            return deletedItems;
+        }
+        if(optionalDeleteCount <=0){
+            return deletedItems;
+        }
+        if(optionalDeleteCount > arrayLength){
+                deletCount = arrayLength - startIndex;
+        } else {
+            deletCount = optionalDeleteCount;
+        }
+        for(var i = startIndex; i <= deletCount ; i++){
+            if(i < arrayLength){
+                deletedItems.push(array[i]);
+            }
+            if(startIndexIsNegative){
+                array.pop();   
+            }
+        }
+        // shift elements left to replace deletedItems elements
+        var k = 0;
+        for (var j = startIndex; j < arrayLength; j++) {
+            if (k === 0) { // first time only
+                if(j + k + deletCount >= arrayLength){
+                    array[j] = array[j + k + arrayLength - 1 -j];
+                } else {
+                    array[j] = array[j + k + deletCount];
+                }
+            } else {
+                array[j] = array[j + k];
+            }
+            k++;
+        }
+        array.length = array.length - deletCount;
+        return deletedItems;
+        } // arguments >= 3   
+        
+
+    if(arguments.length >= 2){ // startIndex
+        if(startIndex < 0){
+            startIndexIsNegative = true;
+        }
+
+        if(startIndexIsNegative){ 
+            if(Math.abs(startIndex) > arrayLength){
+                startIndex = 0;
+            } else {
+                startIndex = arrayLength + startIndex;
+            }  
+        }
+        if (Math.abs(startIndex) > arrayLength){
+            startIndex = arrayLength;
+        }
+     
+        for(var i = startIndex; i < arrayLength; i++){
+                deletedItems.push(array[i]);
+            if(startIndexIsNegative){
+                array.pop();
+            }
+        }
+        var k = 0;
+        for (var j = startIndex; j < arrayLength; j++) {
+                array[j] = array[j + k];
+                k++;
+        }
+        array.length = array.length - k;
+    }            
+    return deletedItems;
+};
+
+tests ({
+    // 'It should accept an index at which to start changing the array.':function(){
+    //     var array = ['Jan', 'March', 'April',];
+    //     var result = splice(array, 1);
+    //     // console.log(result);
+    //     // console.log(array);
+    //     // eq(result.length, 2);
+    //     eq(result.length, 2);
+    //     eq(array.length, 1);
+    // },
+    '1. It should return an array containing the deleted elements.': function(){
+        var array = ['Jan', 'March', 'April']
+        var result = splice(array, 1);
+        eq(result[0], ['March']);
+        eq(result[1], ['April']);
+    },
+    '2. If only one element is removed, an array of one element is returned.':function(){
+        var array = ['Jan', 'March', 'April']
+        var result = splice(array, 2);
+        // eq(result[0], ['April']);
+        eq(result.length, 1);
+    },
+    '3. If no elements are removed, an empty array is returned.':function(){
+        var array = ['Jan', 'March', 'April']
+        var result = splice(array);
+        // eq(result[0], ['April']);
+        eq(result.length, 0);
+    },
+
+    '4. If start is greater than the length of the array, start will be set to the length of the array.':function(){
+        var array = ['Jan', 'March', 'April']
+        var result = splice(array, 4);
+        // console.log(result);
+        // console.log(array);
+        eq(result.length, 0);
+        eq(array.length, 3);
+    }, 
+    // with origin -1, meaning -n is the index of the nth last element and is therefore equivalent to the index of array.length - n)
+    '5. If start is negative, it will begin that many elements from the end of the array.':function(){
+        var array = ['Jan', 'March', 'April']
+        var result = splice(array, -1);
+        eq(result[0], 'April');
+        eq(array.length, 2);
+    },
+    // TODO: refactor #5 function code to use abs value
+    '6. If the absolute value of start is greater than the length of the array, it will begin from index 0.':function(){
+        var array = ['Jan', 'March', 'April']
+        var result = splice(array, -5);
+        eq(result.length, 3);
+        eq(array.length, 0);
+    },
+    '7. Optional delete count should be an integer. If not the method does not run.':function(){
+        var array = ['Jan', 'March', 'April'];
+        var result = splice(array, 1,"two");
+        eq(result.length, 0);
+        eq(array.length, 3);        
+    },
+    '8. Delete count should return an array equal to the delete count.':function(){
+        var array = ['Jan', 'March', 'April'];
+        var result = splice(array, 1,2);
+        eq(result.length, 2);
+        eq(result[0], 'March');
+        eq(result[1], 'April');    
+    },
+    '9. Delete count should remove from the array the deletedCount of elements from start.': function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 2);
+        eq(array.length, 2);
+        eq(result.length, 2);
+        eq(array[0], 'Jan');
+        eq(result[0], 'March');
+    },
+    '10. If deleteCount is omitted, then all the elements from start to the end of the array will be deleted.': function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1);
+        eq(array.length, 1);
+        eq(array[0], 'Jan');
+        eq(result.length, 3);
+    },
+    //that is, if it is equal to or greater than the number of elements left in the array, starting at start), 
+    '11. If deleteCounts value is equal to or larger than array.length - start, then all the elements from start to the end of the array will be deleted.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 5);
+        // console.log(array);
+        eq(result.length, 3);
+        eq(array[0], 'Jan');
+    },
+    '12. If deleteCount is negative, no elements are removed. In this case, you should specify at least one new element.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, -2);
+        // console.log(array);
+        eq(result.length, 0);
+        eq(array.length, 4);        
+    },
+    '13. If deleteCount is 0 no elements are removed. In this case, you should specify at least one new element.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 0);
+        // console.log(array);
+        eq(result.length, 0);
+        eq(array.length, 4);        
+    },
+    // observe my process
+    '14. It should accept an optional item to add to the array.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 0, 99);
+        // console.log(array);
+        // console.log(result);
+        eq(result.length, 0);
+        eq(array[1], 99); 
+    },
+    '15. It should accept optional items to add to the array.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 0, 'Feb', 99);
+        // console.log(array);
+        // console.log(result);
+        eq(result.length, 0);
+        eq(array.length, 6);
+        eq(array[1], 'Feb'); 
+        eq(array[2], 99);
+        eq(array[3], 'March');
+        eq(array[4], 'April');
+        eq(array[5  ], 'May');
+    },
+    '15. It should accept 3 or more optional items to add to the array.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 0, 'Feb', 99, 100);
+        // console.log(array);
+        // console.log(result);
+        eq(result.length, 0);
+        eq(array.length, 7);
+        eq(array[1], 'Feb'); 
+        eq(array[2], 99);
+        eq(array[3], 100);
+        eq(array[4], 'March');
+        eq(array[5], 'April');
+        eq(array[6], 'May');
+    },
+    'xIf only one element is removed, an array of one element is returned.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 1);
+        // console.log(array);
+        // console.log(result);
+        eq(result.length, 1);
+        eq(array.length, 3);
+
+    },
+    'ref-If delete count is blank, it should return from startIndex to the end of the array.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 2);
+        // console.log(array);
+        // console.log(result);
+        eq(result.length, 2);
+        eq(array.length, 2);
+    },
+    'If zero elements are removed, an empty array is returned.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 2, 0);
+        // console.log(array);
+        // console.log(result);
+        eq(result.length, 0);
+        eq(array.length, 4);
+    },
+    // 'It should delete 1 element and insert 1 element starting at start index'
+    'It should delete and insert the parameters passed in to deleteCount and insert item.':function(){
+        var array = ['Jan', 'March', 'April', 'May'];
+        var result = splice(array, 1, 1, 'one');
+        console.log('actual: ', array, 'expected:', '[Jan", "one", "April", "May"]');
+        console.log('actual', result, 'expected', '["March"]');
+        eq(result.length, 1);
+        eq(array.length, 4);
+        eq(result[0], "March");
+        eq(array[1], "one");
+    },
+    // "If the specified number of elements to insert differs from the number of elements being removed, the array's length will be different at the end of the call.":function(){
+    //     var array = ['Jan', 'March', 'April', 'May'];
+    //     var result = splice(array, 1, 3, 'one', 'two');
+    //     // var result = splice(array, 1, 3);
+
+    //     console.log(array);
+    //     console.log(result);
+    //     eq(result.length, 3);
+    //     eq(array.length, 3);
+
+    // }
+   
+ 
+})
+</script>    
+</body>
+</html>
