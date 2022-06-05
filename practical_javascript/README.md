@@ -1,6 +1,6 @@
 Build up a TODO app from a basic command line interface to a browser app from a set of given requirements in 11 steps.
 
-Some versions can be run on Glitch:
+Some versions can be run on Glitch by clicking the index.html file and selecting the Preview button:
 
 * [Remove Methods](https://glitch.com/edit/#!/wealthy-seasoned-machine)
 
