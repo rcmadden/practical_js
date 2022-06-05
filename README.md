@@ -1,5 +1,5 @@
 # practical_js
-Practical Javascript course projects: Remove JQuery, TODO App, etc.
+Course projects includeing Remove JQuery, TODO App, etc.
 
 ## [TODO App](https://github.com/rcmadden/practical_js/tree/master/practical_javascript)
 Build up a TODO app from a basic command line interface to a browser app from a set of given requirements in 11 steps.
